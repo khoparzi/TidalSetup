@@ -6,7 +6,6 @@ OSCFunc.trace(true, true);
 
 OSCFunc.trace(false, false);
 
-Server.local.options.device = nil;
 s.scope;
 s.freqscope;
 
@@ -29,8 +28,6 @@ s.options.outDevice.postln;
 	s.waitForBoot {
 		~dirt = SuperDirt(2, s); // two output channels, increase if you want to pan across more channels
 		~dirt.loadSoundFiles;   // load samples
-		~dirt.loadSoundFiles("/Users/khoparzi/Music/Samples/superdirt/scw-one");
-		~dirt.loadSoundFiles("/Users/khoparzi/Music/Samples/superdirt/scw-two");
 		s.sync;
 		~dirt.start(57120, [0,0,0,0]);
 
@@ -75,8 +72,7 @@ s.options.outDevice.postln;
 
 		//
 		"/Users/khoparzi/Dev/Live-Coding/diegodorado-tidal-synths/loadAll.scd".load();
-		"/Users/khoparzi/Dev/Live-Coding/livecode-this/synths/tidalInstruments.scd".load();
-		"/Users/khoparzi/Dev/Live-Coding/tidal_midi_harmony/e_fairbanks.scd".load();
+		"/Users/khoparzi/Dev/Live-Coding/setup/synthDefs.scd".load();
 
 		osc = NetAddr.new("127.0.0.1", 6010);
 

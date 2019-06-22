@@ -20,12 +20,12 @@ let inter = interlace
     slowersaw = (slow 8 (saw))
     slowtri = (slow 4 (tri))
     slowertri = (slow 8 (tri))
-    rangesine a b = (range a b $ sine)
-    rangesine' a b c = (range a b $ slow c $ sine)
-    rangesaw a b = (range a b $ saw)
-    rangesaw' a b c = (range a b $ slow c $ saw)
-    rangetri a b = (range a b $ tri)
-    rangetri' a b c = (range a b $ slow c $ tri)
+    rsine a b = (range a b $ sine)
+    rsine' a b c = (range a b $ slow c $ sine)
+    rsaw a b = (range a b $ saw)
+    rsaw' a b c = (range a b $ slow c $ saw)
+    rtri a b = (range a b $ tri)
+    rtri' a b c = (range a b $ slow c $ tri)
     htime p = slow 2 $ p
     qttime p = slow 4 $ p
     dtime p = fast 2 $ p
@@ -152,12 +152,16 @@ let footwork1 = struct "t(3,8,2)"
     footwork2 = struct "t(5,8)"
     footwork3 = struct "t(<3 5>,8,2)"
     dancehall = struct "t ~ ~ t"
+    grimer1 = struct "t [~ t]? ~ [t [~ t] [~ t?] t]/2"
+    grimer2 = struct (cat ["t [~ t] t*2 [~ t]", "t [t [~ t] [~ t] t]"])
     hatgain p = (# gain "1 0.9 0.5 0.8") $ p
     voxfilt p = ((# bpf (slowsaw * 2000)) . (# bpq 0.2)) $ p
     freqsweep = (range 200 2000 (sine))
     highsweep = (range 4000 8000 (sine))
     midsweep = (range 800 4000 (sine))
     lowsweep = (range 50 500 (sine))
+
+let scale = getScale (scaleTable ++ [("skepta", [0, 1, 4, 5, 7 , 8, 10, 11])])
 
 -- For song sections
 let muteGroup g = mapM (streamMute tidal) g
@@ -178,6 +182,8 @@ let a = accelerate
 
 -- Pattern effects
 let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
+    ob = trunc (slow 4 $ "<0.25 0.5 0.75 1>")
+    ob' d = trunc (slow d $ "<0.25 0.5 0.75 1>")
     dubd p = sometimes (stut (choose[4, 8]) 0.0125 (1/8)) $ p
     dubd' d p = sometimes (stut (choose[4, 8]) d (1/8)) $ p
     dubd'' d t p = sometimes (stut (choose[4, 8]) d t) $ p

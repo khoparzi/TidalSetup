@@ -213,3 +213,5 @@ let f = pF "f"
 let sendMidiClock = p "clock" $ fast 2 $ midicmd "midiClock*48" # s "iac"
 let sendMidiStop = once $ midicmd "stop" # s "iac"
 let sendMidiStart = once $ midicmd "start" #s "iac"
+
+:set prompt "GoBombastic!>"

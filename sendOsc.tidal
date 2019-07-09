@@ -13,6 +13,7 @@
 --
 -- let v = streamReplace visTidal
 -- let blank = streamHush visTidal
+import Sound.Tidal.Context
 
 :{
 let visualTarget = superdirtTarget {oName = "HailHydra", -- Give your target a name

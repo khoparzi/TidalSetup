@@ -171,6 +171,9 @@ let erun = (run 8)
     move'' p = foldEvery [2,3] (0.25 <~) $ p
     move' p = foldEvery [3,4] (0.25 ~>) $ p
     move''' p = foldEvery [2,3] (0.25 ~>) $ p
+    thicken' x percent p = superimpose ((# pan 1) . (|* speed percent)) $ ((# speed x) . (# pan 0)) $ p
+    thicken p = thicken' 1 0.8 $ p
+    fuckery p = every 5 (rip 0.5 0.1) $ every 6 (rip' 0 1 8 0.5 0.1) $ every 7 (# coarse "{4 8 6 12 16}%14") $ every 8 (# accelerate "-0.5 0.5") $ p
 
 
 -- From jArm https://gist.github.com/jarmitage/627a7d5a9263475ba53f725f1405d6a2
@@ -297,12 +300,14 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     simplefuck' p = foldEVery [5, 6, 7] (rip' 0 1 8 0.5 "<0.1 0.2 0.4>") $ every 7 (# coarse "{4 8 6 12 16}%14") $ every 8 (# accelerate "-0.5 0.5") $ p
     mess' = simplefuck'
     crushit p = (# crush (range 3 8 $ slow 1.1 tri)) $ p
+    messup = fuckery
 
 -- Utility values
 let bassCut = 0 -- for live performances
 
 -- For minimal
 let f = pF "f"
+    freq = pF "freq"
     scw a p = ((# s "scw-one") . (# loop a)) $ p
     sinew p = ((# s "tutorial5")) $ p
 

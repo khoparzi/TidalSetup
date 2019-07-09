@@ -1,3 +1,12 @@
+
+import Sound.Tidal.Utils
+
+import Sound.Tidal.Params
+
+import Data.Maybe
+
+import Control.Applicative
+
 -- Aliases
 let inter = interlace
     bpm(a) = setcps(a/120)
@@ -189,6 +198,14 @@ let r = run
     -- ceven  a = c (patToList (even  a)) -- choose even
     oddi   a = rev (odd a) -- odd inverted
     eveni  a = rev (even a) -- even inverted
+    qn = (1/4)
+    en = (1/8)
+    sn = (1/16)
+    tn = (1/32)
+    qn' m = (1/4) * m
+    en' m = (1/8) * m
+    sn' m = (1/16) * m
+    tn' m = (1/32) * m
 
 -- Abbrevs for transitions
 let j p n  = jumpIn' n
@@ -293,6 +310,8 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     crippery p = every 4 (jux (# accelerate "[-0.1..0.2]/4")) $ every 6 (jux (# accelerate "[-0.3..0.4]/2")) $ p
     rater = rarely (iter (cs 1 [4,8]))
     fastflip = fast "1 [2 1]"
+    oftflip = often (fast "1 [2 1]")
+    rareflip = rarely (fast "1 [2 1]")
     microd p = often ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
     foldedParty p = foldEvery [3, 7, 13] (spread ($) [fast 4, jux (rev), spike]) $ p
     simplefuck p = foldEVery [5, 6, 7] (rip 0.5 "<0.1 0.2 0.4>") $ every 7 (# coarse "{4 8 6 12 16}%14") $ every 8 (# accelerate "-0.5 0.5") $ p

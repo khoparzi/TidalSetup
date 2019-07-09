@@ -21,12 +21,73 @@ let inter = interlace
     slowersaw = (slow 8 (saw))
     slowtri = (slow 4 (tri))
     slowertri = (slow 8 (tri))
-    rsine a b = (range a b $ sine)
-    rsine' a b c = (range a b $ slow c $ sine)
-    rsaw a b = (range a b $ saw)
-    rsaw' a b c = (range a b $ slow c $ saw)
-    rtri a b = (range a b $ tri)
-    rtri' a b c = (range a b $ slow c $ tri)
+    fa = fast
+    sl = slow
+    -- continous function shorthands
+    sin = sine
+    cos = cosine
+    sq  = square
+    pulse w = sig $ \t -> if ((snd $ properFraction t) >= w) then 1.0 else 0.0
+    pulse' w = liftA2 (\a b -> if (a>=b) then 1.0 else 0.0) saw w
+    pw = pulse
+    pw' = pulse'
+
+    -- range shorthands
+    range' from to p = (p*to - p*from) + from
+    rg' = range'
+    rg = range -- old: scale
+    rgx = rangex -- old: scalex
+
+    -- continuous at freq
+    sinf  f = fast f $ sin -- sine at freq
+    cosf  f = fast f $ cos -- cosine at freq
+    trif  f = fast f $ tri -- triangle at freq
+    sawf  f = fast f $ saw -- saw at freq
+    isawf f = fast f $ isaw -- inverted saw at freq
+    sqf   f = fast f $ sq -- square at freq
+    pwf w f = fast f $ pw w -- pulse at freq
+    pwf' w f = fast f $ pw' w -- pulse' at freq
+    randf f = fast f $ rand -- rand at freq
+
+    -- ranged continuous
+    rsin i o = rg' i o sin -- ranged' sine
+    rcos i o = rg' i o cos -- ranged' cosine
+    rtri i o = rg' i o tri -- ranged' triangle
+    rsaw i o = rg' i o saw -- ranged' saw
+    risaw i o = rg' i o isaw -- ranged' inverted saw
+    rsq i o = rg' i o sq -- ranged' square
+    -- rpw i o w = rg' i o pw w -- ranged' pulse
+    -- rpw' i o w = rg' i o pw' w -- ranged' pulse'
+    rrand i o = rg' i o rand -- ranged' rand
+    rxsin i o = rgx i o sin -- ranged' exponential sine
+    rxcos i o = rgx i o cos -- ranged' exponential cosine
+    rxtri i o = rgx i o tri -- ranged' exponential triangle
+    rxsaw i o = rgx i o saw -- ranged' exponential saw
+    rxisaw i o = rgx i o isaw -- ranged' exponential inverted saw
+    rxsq  i o = rgx i o sq -- ranged' exponential sqaure
+    rxpw i o w = rgx i o pw w -- ranged' exponential pulse
+    rxpw' i o w = rgx i o pw' w -- ranged' exponential pulse'
+    rxrand i o = rgx i o rand -- ranged' exponential rand
+
+    -- ranged continuous at freq
+    rsinf i o f = fast f $ rsin i o -- ranged' sine at freq
+    rcosf i o f = fast f $ rcos i o -- ranged' cosine at freq
+    rtrif i o f = fast f $ rtri i o -- ranged' triangle at freq
+    rsawf i o f = fast f $ rsaw i o -- ranged' saw at freq
+    risawf i o f = fast f $ risaw i o  -- ranged' inverted saw at freq
+    rsqf i o f = fast f $ rsq i o  -- ranged' square at freq
+    -- rpwf i o w f = fast f $ rpw' i o w -- ranged' pulse at freq
+    rrandf i o f = fast f $ rrand i o -- ranged' rand at freq
+    rxsinf i o f = fast f $ rxsin i o -- ranged' exponential sine at freq
+    rxcosf i o f = fast f $ rxcos i o -- ranged' exponential cosine at freq
+    rxtrif i o f = fast f $ rxtri i o -- ranged' exponential triangle at freq
+    rxsawf i o f = fast f $ rxsaw i o -- ranged' exponential saw at freq
+    rxisawf i o f = fast f $ rxisaw i o -- ranged' exponential inverted saw at freq
+    rxsqf i o f = fast f $ rxsq i o -- ranged' exponential square at freq
+    rxpwf i o w f = fast f $ rxpw i o w -- ranged' exponential pulse at freq
+    rxpwf' i o w f = fast f $ rxpw' i o w -- ranged' exponential pulse' at freq
+    rxrandf i o f = fast f $ rxrand i o  -- ranged' exponential random at freq
+
     htime p = slow 2 $ p
     qttime p = slow 4 $ p
     dtime p = fast 2 $ p
@@ -143,10 +204,45 @@ let j p n  = jumpIn' n
     cl8 p  = clutchIn p 8
     cl16 p = clutchIn p 16
 
--- continous function shorthands
-let sin = sine
-    cos = cosine
-    sq  = square
+-- FX groups
+let snl  = grp [mF "sound",   mF "n", mF "legato"]
+    adsr = grp [mF "attack",  mF "decay", mF "sustain", mF "release"]
+    del  = grp [mF "delay",   mF "delaytime", mF "delayfeedback"]
+    scc  = grp [mF "shape",   mF "coarse", mF "crush"]
+    -- lpf  = grp [mF "cutoff",  mF "resonance"] -- deprecated
+    -- bpf  = grp [mF "bandf",   mF "bandq"] -- deprecated
+    -- hpf  = grp [mF "hcutoff", mF "hresonance"] -- deprecated
+    spa  = grp [mF "speed",   mF "accelerate"]
+    rvb  = grp [mF "room",    mF "size"]
+    gco  = grp [mF "gain",    mF "cut", mF "orbit"]
+    glo  = grp [mF "gain",    mF "legato", mF "orbit"]
+    go   = grp [mF "gain",    mF "orbit"]
+    io   = grp [mF "begin",   mF "end"]
+    eq   = grp [mF "cutoff",  mF "resonance", mF "bandf", mF "bandq", mF "hcutoff", mF "hresonance"]
+    tremolo = grp [mF "tremolorate", mF "tremolodepth"]
+    phaser  = grp [mF "phaserrate", mF "phaserdepth"]
+    -- TODO: add SpectralTricks / SC FX groups
+    -- FX groups' function version
+    snl' a b = sound a # n b # legato 1
+    snl'' a b l = sound a # n b # legato l
+    adsr' a d s r = attack a # decay d # sustain s # release r
+    del' l t f = delay l # delaytime t # delayfeedback f
+    delq' l t f = delay l # delaytime ((1/4)*t) # delayfeedback f
+    dele' l t f = delay l # delaytime ((1/8)*t) # delayfeedback f
+    dels' l t f = delay l # delaytime ((1/16)*t) # delayfeedback f
+    scc' s c c' = shape s # coarse c # crush c'
+    lpf' c r = cutoff c # resonance r
+    bpf' f q = bandf f # bandq q
+    hpf' c r = hcutoff c # hresonance r
+    spa' s a = speed s # accelerate a
+    gco' g c o = gain g # cut c # orbit o
+    glo' g l o = gain g # legato l # orbit o
+    go' g o = gain g # orbit o
+    rvb' r s = room r # size s
+    io' i o  = begin i # end o
+    eq' h b l q = cutoff l # resonance q # bandf b # bandq q # hcutoff h # hresonance q
+    tremolo' r d = tremolorate r # tremolodepth d
+    phaser' r d = phaserrate r # phaserdepth d
 
 -- Useful patterns
 let footwork1 = struct "t(3,8,2)"

@@ -263,6 +263,10 @@ let snl  = grp [mF "sound",   mF "n", mF "legato"]
     eq' h b l q = cutoff l # resonance q # bandf b # bandq q # hcutoff h # hresonance q
     tremolo' r d = tremolorate r # tremolodepth d
     phaser' r d = phaserrate r # phaserdepth d
+    grain' = grp [mF "begin", mF "end"]
+    grain s w = begin s # end (s + w)
+    grain8 s w = begin (en' s) # end ((en' s) + w)
+    grain16 s w = begin (sn' s) # end ((sn' s) + w)
 
 -- Useful patterns
 let footwork1 = struct "t(3,8,2)"

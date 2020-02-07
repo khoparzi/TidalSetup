@@ -9,10 +9,10 @@ import Control.Applicative
 
 -- Aliases
 let inter = interlace
-    bpm(a) = setcps(a/120)
+    bpm(a) = setcps(a/120/2)
+    bpmm b = cps (b/120/2)
     st = stack
     ct = cat
-    gi x = gain (x * 0.1) -- Integer gain
     cs i a = (segment i $ choose a)
     levl = gain . fmap (\x -> if abs x > 1 then 1 else x)
     chup = const "~"
@@ -40,6 +40,8 @@ let inter = interlace
     pulse' w = liftA2 (\a b -> if (a>=b) then 1.0 else 0.0) saw w
     pw = pulse
     pw' = pulse'
+    stb a p = sometimesBy a p
+    x e = (10 ** e) -- For exponent frequencys
 
     -- range shorthands
     range' from to p = (p*to - p*from) + from
@@ -200,12 +202,37 @@ let r = run
     eveni  a = rev (even a) -- even inverted
     qn = (1/4)
     en = (1/8)
+    qv = (1/8)
     sn = (1/16)
+    sqv = (1/16) -- Semi quaver
     tn = (1/32)
+    dsqv = (1/32) -- Demi Semi quaver
+    hdsqv = (1/64)  -- Hemi Demi Semi quaver
     qn' m = (1/4) * m
     en' m = (1/8) * m
+    qv' m = (1/8) * m
     sn' m = (1/16) * m
+    sqv' m = (1/16) * m
     tn' m = (1/32) * m
+    dsqv' m = (1/32) * m
+    hdsqv' m = (1/64) * m
+    -- Time division runs
+    qnr = (r 4) * (1/4)
+    enr = (r 8) * (1/8)
+    qvr = (r 8) * (1/8)
+    snr = (r 16) * (1/16)
+    sqvr = (r 16) * (1/16) -- Semi quaver
+    tnr = (r 32) * (1/32)
+    dsqvr = (r 32) * (1/32) -- Demi Semi quaver
+    hdsqvr = (r 64) * (1/64)  -- Hemi Demi Semi quaver
+    qnr' m = (r m) * (1/4)
+    enr' m = (r m) * (1/8)
+    qvr' m = (r m) * (1/8)
+    snr' m = (r m) * (1/16)
+    sqvr' m = (r m) * (1/16)
+    tnr' m = (r m) * (1/32)
+    dsqvr' m = (r m) * (1/32)
+    hdsqvr' m = (r m) * (1/64)
 
 -- Abbrevs for transitions
 let j p n  = jumpIn' n
@@ -245,6 +272,7 @@ let snl  = grp [mF "sound",   mF "n", mF "legato"]
     -- FX groups' function version
     snl' a b = sound a # n b # legato 1
     snl'' a b l = sound a # n b # legato l
+    slg s = sound s # legato 1
     adsr' a d s r = attack a # decay d # sustain s # release r
     del' l t f = delay l # delaytime t # delayfeedback f
     delq' l t f = delay l # delaytime ((1/4)*t) # delayfeedback f
@@ -252,8 +280,11 @@ let snl  = grp [mF "sound",   mF "n", mF "legato"]
     dels' l t f = delay l # delaytime ((1/16)*t) # delayfeedback f
     scc' s c c' = shape s # coarse c # crush c'
     lpf' c r = cutoff c # resonance r
+    lpfx f x = lpf (f * (10 ** x)) -- Lowpass with exponent
     bpf' f q = bandf f # bandq q
+    bpfx f x = bpf (f * (10 ** x))
     hpf' c r = hcutoff c # hresonance r
+    hpfx f x = hpf (f * (10 ** x))
     spa' s a = speed s # accelerate a
     gco' g c o = gain g # cut c # orbit o
     glo' g l o = gain g # legato l # orbit o
@@ -309,10 +340,12 @@ let a = accelerate
     d = discretise
     e = end
     g x = gain $ minimum [1.5,x] -- Safetied gain
+    gi x = g (x * 0.1) -- Integer gain
     l = legato
     u = up
     o = octave
     t = trunc
+    si = superimpose
 
 -- Pattern effects
 let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
@@ -327,9 +360,11 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     crippery p = every 4 (jux (# accelerate "[-0.1..0.2]/4")) $ every 6 (jux (# accelerate "[-0.3..0.4]/2")) $ p
     rater = rarely (iter (cs 1 [4,8]))
     fastflip = fast "1 [2 1]"
+    someflip = sometimes (fast "1 [2 1]")
     oftflip = often (fast "1 [2 1]")
     rareflip = rarely (fast "1 [2 1]")
     microd p = often ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
+    microd' p = rarely ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
     foldedParty p = foldEvery [3, 7, 13] (spread ($) [fast 4, jux (rev), spike]) $ p
     simplefuck p = foldEVery [5, 6, 7] (rip 0.5 "<0.1 0.2 0.4>") $ every 7 (# coarse "{4 8 6 12 16}%14") $ every 8 (# accelerate "-0.5 0.5") $ p
     mess = simplefuck
@@ -337,6 +372,7 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     mess' = simplefuck'
     crushit p = (# crush (range 3 8 $ slow 1.1 tri)) $ p
     messup = fuckery
+    messitup = fuckery
 
 -- Utility values
 let bassCut = 0 -- for live performances

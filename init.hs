@@ -87,6 +87,12 @@ let inter = interlace
     rsawf i o f = fast f $ rsaw i o -- ranged' saw at freq
     risawf i o f = fast f $ risaw i o  -- ranged' inverted saw at freq
     rsqf i o f = fast f $ rsq i o  -- ranged' square at freq
+    rsins i o s = slow s $ rsin i o -- ranged' sine at freq
+    rcoss i o s = slow s $ rcos i o -- ranged' cosine at freq
+    rtris i o s = slow s $ rtri i o -- ranged' triangle at freq
+    rsaws i o s = slow s $ rsaw i o -- ranged' saw at freq
+    risaws i o s = slow s $ risaw i o  -- ranged' inverted saw at freq
+    rsqs i o s = slow s $ rsq i o  -- ranged' square at freq
     -- rpwf i o w f = fast f $ rpw' i o w -- ranged' pulse at freq
     rrandf i o f = fast f $ rrand i o -- ranged' rand at freq
     rxsinf i o f = fast f $ rxsin i o -- ranged' exponential sine at freq
@@ -303,10 +309,17 @@ let snl  = grp [mF "sound",   mF "n", mF "legato"]
 let footwork1 = struct "t(3,8,2)"
     footwork2 = struct "t(5,8)"
     footwork3 = struct "t(<3 5>,8,2)"
+    footwork4 = struct "t(3,8,<0 7>)"
     footwork = struct "[t ~ ~ t ~ ~ t ~]"
     footwork' f p = fast f $ struct "[t ~ ~ t ~ ~ t ~]" $ p
     altfoot = struct (cat ["[t ~ ~ t ~ ~ t ~]", "[~ t ~ ~ t ~ ~ t]", "[~ ~ t ~ ~ t ~ ~]"])
-    dancehall = struct "t ~ ~ t"
+    dancehall = struct "[1 ~ ~ 1] ~"
+    dancehall' f p = fast f $ struct "[1 ~ ~ 1] ~" $ p
+    dancehall1 = struct "[1 ~ ~ 1] ~"
+    dancehall2 = struct "[1 <~ 1> ~ 1] ~"
+    dancehall3 = struct "[1 <~ 1 ~> <~ 1> 1] ~"
+    dancehall4 = struct "[t ~ ~ t] [~ <~ ~ ~ t>]"
+    erev b p = every b (rev) $ p
     grimer1 = struct "t [~ t]? ~ [t [~ t] [~ t?] t]/2"
     grimer2 = struct (cat ["t [~ t] t*2 [~ t]", "t [t [~ t] [~ t] t]"])
     swinger = struct "[t [t ~ t]]*2"
@@ -325,6 +338,8 @@ let footwork1 = struct "t(3,8,2)"
     highsweep' s = slow s $ (range 4000 8000 (sine))
     midsweep' s = slow s $ (range 800 4000 (sine))
     lowsweep' s = slow s $ (range 50 500 (sine))
+    chancervb p = (# room (scramble 8 "0!7 0.9")) . (# size (wchoose[(1,0.1), (0.5, 0.25), (0, 0.5)])) $ p
+    mascan = ((>| n ("0 1 2 3 4 5 6 7" + "<0 8>")) . (# legato 1))
 
 let scale = getScale (scaleTable ++ [("skepta", [0, 1, 4, 5, 7 , 8, 10, 11])])
 
@@ -380,8 +395,67 @@ let bassCut = 0 -- for live performances
 -- For minimal
 let f = pF "f"
     freq = pF "freq"
+    cfreq = pF "centerFreq"
+    mul = pF "mul"
     scw a p = ((# s "scw-one") . (# loop a)) $ p
     sinew p = ((# s "tutorial5")) $ p
+
+let deepbass = s "beben" # n 1
+    orgbass = s "beben" # n 5
+    orgbass2 = s "beben" # n 15
+    smthbass = s "beben" # n 6
+    pluckbass = s "beben" # n 12
+    jazzbass = s "abst" # n 1
+    wubbass = s "backwhen" # n 0
+    dubbass = s "dubr" # n 0
+    grrbass = s "dubr" # n 13
+    apollopad = s "pads" # n 3
+    deeppad = s "pads" # n 9
+    melpad1 = s "pads" # n 12
+    melpad2 = s "pads" # n 13
+    brightuppad = s "pads" # n 22
+    melpad = s "pads" # n 24
+    basspad = s "pads" # n 44
+    dnbpad = s "pads" # n 46
+    sparklepad = s "pads" # n 52
+    -- Drums
+    jukeclap = s "jukeit" # n 3
+
+-- Params to control visuals
+let vis = p "vis" . (|< s "dummy")
+    rotx = pF "rotx"
+    roty = pF "roty"
+    rotz = pF "rotz"
+    rotxa = pF "rotxa"
+    rotya = pF "rotya"
+    rotza = pF "rotza"
+    posx = pF "posx"
+    posy = pF "posy"
+    posz = pF "posz"
+    pos' = grp [mF "posx", mF "posy", mF "posz"]
+    pos x y z = posx x # posy y # posz z
+    dolly = pF "dolly"
+    sep = pF "sep"
+    fs = pF "fs"
+    is = pF "is"
+    vs = pF "vs"
+    saxis = pS "saxis"
+
+-- For muting
+let d1m = p 1 $ silence
+    d2m = p 2 $ silence
+    d3m = p 3 $ silence
+    d4m = p 4 $ silence
+    d5m = p 5 $ silence
+    d6m = p 6 $ silence
+    d7m = p 7 $ silence
+    d8m = p 8 $ silence
+
+-- For Ableton Link -- Doesn't work here, but does
+-- when you copy it to a tidal file (seems like an indentation issue)
+-- link = do
+          -- sock <- carabiner tidal 4 (-0.1)
+          -- putStrLn "Starting Link synchronisation..."
 
 -- For drum machines
 let sendMidiClock = p "clock" $ fast 2 $ midicmd "midiClock*48" # s "iac"

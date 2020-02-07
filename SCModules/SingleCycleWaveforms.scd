@@ -1,5 +1,6 @@
 (
 	var akWFPath = "/Users/khoparzi/Music/Samples/AKWF/";
+	"\n\nLoading single cycle waveforms for minimal glitchiness...".postln;
 	~dirt.loadSoundFileFolder("/Users/khoparzi/Music/Samples/superdirt/scw-one", \scw);
 	~dirt.loadSoundFileFolder("/Users/khoparzi/Music/Samples/superdirt/scw-two", \scw, true);
 	~dirt.loadSoundFileFolder("/Users/khoparzi/Music/Samples/superdirt/scw-nasty", \scw, true);

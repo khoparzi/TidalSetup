@@ -1,6 +1,7 @@
 // From Eric Fairbanks
 // http://ericfairbanks.org
 
+"\n\nLoading custom synthDefs...".postln;
 (SynthDef(\donk, {
   |out, sustain = 1, freq = 440, speed = 1, begin=0, end=1, pan, accelerate, offset|
   var line = Line.ar(begin, end, sustain, doneAction:2);
@@ -211,7 +212,6 @@ SynthDef(\stiff, { |out, sustain = 1, freq, amp=0.5, c3=20, pan, fB = 80, rel= 0
 }).add
 );
 
-/*(
 SynthDef(\piano, { |out, sustain = 1, freq=440, /*gate, */ amp=0.5, rho=1, pan, offset|
 var env = EnvGen.ar( Env.asr(0,1,0.1), /*gate, */ timeScale:sustain, doneAction:2 );
 var sound = OteyPianoStrings.ar( freq, amp, rho:rho ) * env;
@@ -220,18 +220,11 @@ DirtPan.ar(sound * 1, ~dirt.numChannels, LinLin.kr(freq,36.midicps,90.midicps,-0
 )
 }).add;
 
-{
 SynthDef(\piano_soundboard,{
 var audio = In.ar([20, 21], 2);
 audio = OteySoundBoard.ar(audio);
 Out.ar(0,audio);
 }).add;
-s.sync;
-//start soundboard effect
-Synth.tail(1,\piano_soundboard)
-}.fork;
-);*/
-
 
 (
 SynthDef(\atari, { | out, freq, freqb=550, freqc=660, vola=15, volb=0, volc=0, chink=1, wobbly=1, pan, amp=0.1, /*gate, */ sustain = 1, offset|
@@ -357,5 +350,12 @@ SynthDef(\rhodes, { | out freq pan vel = 0.8 modind = 0.2 mix = 0.2 lfospeed = 0
     OffsetOut.ar(out,
 		DirtPan.ar(snd, ~dirt.numChannels, pan)
 	)
+}).add;
+SynthDef(\ikclick, { arg out = 0, gate = 1, centerFreq = 15000, rq = 0.9, mul = 25, pan = 0, amp = 1;
+    var env, noise, sig;
+    env = EnvGen.ar(Env.perc(0.001, 0.00001 * LFNoise1.kr(4).abs, 1, -4), gate, doneAction: 0);
+    noise = PinkNoise.ar(env);
+    sig = BPF.ar(noise, centerFreq.max(1), rq, mul).fold(-1, 1);
+    Out.ar(out, Pan2.ar(sig, pan, amp.curvelin(0, 1, 0, 1, log(10))));
 }).add;
 );

@@ -1,6 +1,7 @@
 // Maschine Samples
 (
 	var maschinePath = "/Users/khoparzi/Documents/Native\ Instruments/Maschine\ 2/Groups/";
+	"\n\nLoading all the samples from Maschine...".postln;
 	~dirt.loadSoundFileFolder(maschinePath++"Astral\ Flutter/Abstrakta\ Kit\ Samples", \abst);
 	~dirt.loadSoundFileFolder(maschinePath++"Astral\ Flutter/Buzzcut\ Kit\ Samples", \buzzcut);
 	~dirt.loadSoundFileFolder(maschinePath++"Astral\ Flutter/Wax\ Doctor\ Kit\ Samples", \waxdoc);

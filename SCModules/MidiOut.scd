@@ -1,4 +1,5 @@
 (
+	"\n\nConnecting to midi out...".postln;
 	MIDIClient.init;
 	MIDIClient.list;
 	~midiOut = MIDIOut.newByName("IAC Driver", "Bus 1");

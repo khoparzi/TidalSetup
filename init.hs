@@ -280,6 +280,7 @@ let snl  = grp [mF "sound",   mF "n", mF "legato"]
     snl'' a b l = sound a # n b # legato l
     slg s = sound s # legato 1
     adsr' a d s r = attack a # decay d # sustain s # release r
+    ar' a r = attack a # decay 1 # sustain 1 # release r
     del' l t f = delay l # delaytime t # delayfeedback f
     delq' l t f = delay l # delaytime ((1/4)*t) # delayfeedback f
     dele' l t f = delay l # delaytime ((1/8)*t) # delayfeedback f
@@ -419,6 +420,11 @@ let deepbass = s "beben" # n 1
     dnbpad = s "pads" # n 46
     sparklepad = s "pads" # n 52
     -- Drums
+    breaks = s "breaks"
+    breaks16 p = slice 16 p $ s "breaks"
+    breaks32 p = slice 32 p $ s "breaks"
+    breaksp16 p = splice 16 p $ s "breaks"
+    breaksp32 p = splice 32 p $ s "breaks"
     jukeclap = s "jukeit" # n 3
 
 -- Params to control visuals
@@ -450,6 +456,16 @@ let d1m = p 1 $ silence
     d6m = p 6 $ silence
     d7m = p 7 $ silence
     d8m = p 8 $ silence
+-- Mute patterns every x cycles
+    d1m' a = p 1 . (|< orbit 0) . (every a (const "~"))
+    d2m' a = p 2 . (|< orbit 1) . (every a (const "~"))
+    d3m' a = p 3 . (|< orbit 2) . (every a (const "~"))
+    d4m' a = p 4 . (|< orbit 3) . (every a (const "~"))
+    d5m' a = p 5 . (|< orbit 4) . (every a (const "~"))
+    d6m' a = p 6 . (|< orbit 5) . (every a (const "~"))
+    d7m' a = p 7 . (|< orbit 6) . (every a (const "~"))
+    d8m' a = p 8 . (|< orbit 7) . (every a (const "~"))
+    d9m' a = p 9 . (|< orbit 8) . (every a (const "~"))
 
 -- For Ableton Link -- Doesn't work here, but does
 -- when you copy it to a tidal file (seems like an indentation issue)

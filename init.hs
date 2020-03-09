@@ -31,15 +31,13 @@ let inter = interlace
     ct = cat
     cs i a = (segment i $ choose a)
     levl = gain . fmap (\x -> if abs x > 1 then 1 else x)
-    chup = const "~"
+    chup = silent
     takeaway p = degradeBy "<[0.1..0.9>" $ p
     foldEVery = foldEvery
     accelrate = accelerate
     discretize = discretise
     loud p = (# gain 1.2) $ p
-    louder p = (# gain 1.4) $ p
     soft p = (# gain 0.8) $ p
-    softer p = (# gain 0.4) $ p
     slowsine = (slow 4 (sine))
     slowersine = (slow 8 (sine))
     slowsaw = (slow 4 (saw))
@@ -58,6 +56,7 @@ let inter = interlace
     pw' = pulse'
     stb a p = sometimesBy a p
     x e = (10 ** e) -- For exponent frequencys
+    describe = deconstruct
 
     -- range shorthands
     range' from to p = (p*to - p*from) + from
@@ -344,6 +343,14 @@ let footwork1 = struct "t(3,8,2)"
     swinger2 = struct "[t [t ~ <~ t>]]*2"
     swinger3 = struct "[[t ~ <t ~>] [t ~ <~ t>]]*2"
     swinger4 = struct "[[t ~ <t ~>]]*4"
+    son23 = struct "[[1 ~ ~ 1 ~ ~ 1 ~] [~ ~ 1 ~ 1 ~ ~ ~]]"
+    son32 = struct "[[~ ~ 1 ~ 1 ~ ~ ~] [1 ~ ~ 1 ~ ~ 1 ~]]"
+    rhumba23 = struct "[[~ ~ 1 ~ 1 ~ ~ ~] [1 ~ ~ 1 ~ ~ ~ 1]]"
+    rhumba32 = struct "[[1 ~ ~ 1 ~ ~ ~ 1] [~ ~ 1 ~ 1 ~ ~ ~]]"
+    asstruct p = struct (ascii p)
+    asstruct' s a p = slow s $ struct (ascii a) $ p
+    binstruct p = struct (binary p)
+    binstruct' s a p = struct (binaryN s a) $ p
     offed = struct "[~ t]*2"
     offed' f p = fast f $ struct "[~ t]" $ p
     hatgain p = (# gain "1 0.9 0.5 0.8") $ p
@@ -358,7 +365,7 @@ let footwork1 = struct "t(3,8,2)"
     chancervb p = (# room (scramble 8 "0!7 0.9")) . (# size (wchoose[(1,0.1), (0.5, 0.25), (0, 0.5)])) $ p
     mascan = ((>| n ("0 1 2 3 4 5 6 7" + "<0 8>")) . (# legato 1))
 
-let scale = getScale (scaleTable ++ [("skepta", [0, 1, 4, 5, 7 , 8, 10, 11])])
+let scale = getScale (scaleTable ++ [("skepta", [0, 1, 4, 5, 7 , 8, 10, 11]), ("bhairavi", [0, 1, 3, 4, 7 , 8, 10])])
 
 -- For song sections
 let muteGroup g = mapM (streamMute tidal) g

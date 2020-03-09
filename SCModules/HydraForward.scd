@@ -1,5 +1,11 @@
 (
-	var visAddr = NetAddr.new(~visAddr, 3334);
+	{
+		if (~visAddr.isNil == false,
+			{ "Visuals OSC to: ".post; ~visAddr; },
+			{ currentEnvironment.put(\visAddr, "127.0.0.1"); }
+		)
+	}.defer;
+	{var visAddr = NetAddr.new(~visAddr, 3334);
 	"\n\nConnecting to Hydra".postln;
 	// Hydra Forwarding
 	OSCFunc({ |msg, time, tidalAddr|
@@ -7,5 +13,5 @@
 		msg = msg ++ ["time", time, "latency", latency];
 		// msg.postln;
 		visAddr.sendBundle(latency, msg)
-	}, '/play2').fix;
+	}, '/play2').fix;}.defer(1);
 )

@@ -13,16 +13,19 @@
     (~renickPath++"/drums/kick/kick808.scd").load;
     (~renickPath++"/drums/kick/kickOto309.scd").load;
     (~renickPath++"/drums/kick/soskick.scd").load;
-
+    "\n\nLoaded Renick Drums".postln;
+    0.2.wait;
     // Bass
     (~renickPath++"/bass/moogbass.scd").load;
     (~renickPath++"/bass/pluckbass.scd").load;
     (~renickPath++"/bass/ikedaBass.scd").load;
-    (~renickPath++"/bass/bassWarsaw.scd").load;
+    // (~renickPath++"/bass/bassWarsaw.scd").load;
     (~renickPath++"/bass/acidOto3091.scd").load;
     (~renickPath++"/bass/acidOto3092.scd").load;
-
+    "\n\nLoaded Renick Basses".postln;
+    0.2.wait;
     // Leads
     (~renickPath++"/leads/cs80.scd").load;
     (~renickPath++"/leads/fm7.scd").load;
-})
+    "\n\nLoaded Renick synths".postln;
+}.fork;)

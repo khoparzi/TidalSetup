@@ -7,6 +7,22 @@ import Data.Maybe
 
 import Control.Applicative
 
+-------------------------------------------------------------------------------
+import qualified Sound.OSC as OSC
+import qualified Sound.OSC.FD as FD
+import System.IO.Unsafe (unsafePerformIO)
+
+-- | Global reference of the UDP port used to
+-- | communicate with SCLang
+globalUDPRef = unsafePerformIO $ OSC.openUDP "127.0.0.1" 57120
+
+-- | Takes a path and an argument (both strings)
+-- | and sends them to SCLang
+-- oscStringMessage :: String -> String -> IO ()
+oscStringMessage path str = FD.sendMessage globalUDPRef $ OSC.Message path [OSC.string str]
+
+-------------------------------------------------------------------------------
+
 -- Aliases
 let inter = interlace
     bpm(a) = setcps(a/120/2)
@@ -426,6 +442,11 @@ let deepbass = s "beben" # n 1
     breaksp16 p = splice 16 p $ s "breaks"
     breaksp32 p = splice 32 p $ s "breaks"
     jukeclap = s "jukeit" # n 3
+    load s = oscStringMessage "/loadSample" s
+    loadFolder s = oscStringMessage "/loadFolder" s
+    loadPath s = oscStringMessage "/loadPath" s
+    free s = oscStringMessage "/freeSample" s
+    quitsc s = oscStringMessage "/exit" ""
 
 -- Params to control visuals
 let vis = p "vis" . (|< s "dummy")

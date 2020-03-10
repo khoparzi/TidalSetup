@@ -19,10 +19,10 @@
 		}, '/exit', nil, 57120);
 	OSCdef.new(\record, {
 		s.record;
-		}, '/exit', nil, 57120);
+		}, '/record', nil, 57120);
 	OSCdef.new(\stoprecord, {
 		s.stopRecording;
-		}, '/exit', nil, 57120);
+		}, '/stoprecord', nil, 57120);
 
 	// All the sample loading
 	OSCdef.new(\loadSample, {

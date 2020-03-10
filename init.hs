@@ -453,7 +453,7 @@ let deepbass = s "beben" # n 1
     loadFolder s = oscStringMessage "/loadFolder" s
     loadPath s = oscStringMessage "/loadPath" s
     free s = oscStringMessage "/freeSample" s
-    quitsc s = oscStringMessage "/exit" ""
+    quitsc = oscStringMessage "/exit" ""
 
 -- Params to control visuals
 let vis = p "vis" . (|< s "dummy")

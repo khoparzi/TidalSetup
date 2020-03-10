@@ -412,6 +412,8 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     crushit p = (# crush (range 3 8 $ slow 1.1 tri)) $ p
     messup = fuckery
     messitup = fuckery
+    funcSpread p = spread ($) p
+    funcySpread p = spreadChoose ($) p
 
 -- Utility values
 let bassCut = 0 -- for live performances
@@ -442,6 +444,9 @@ let deepbass = s "beben" # n 1
     basspad = s "pads" # n 44
     dnbpad = s "pads" # n 46
     sparklepad = s "pads" # n 52
+    hat808 = s "808:1"
+    bd808 = s "808bd"
+    bd808' a = s "808bd" # n a
     -- Drums
     breaks = s "breaks"
     breaks16 p = slice 16 p $ s "breaks"

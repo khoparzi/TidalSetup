@@ -1,4 +1,5 @@
-(// With minimal samples, four orbits
+(
+	s.options.numOutputBusChannels = 2;
 	currentEnvironment.put(\setupPath, "/Users/khoparzi/Dev/Live-Coding/setup/");
 	currentEnvironment.put(\samplesPath, "/Users/khoparzi/Music/Samples/");
 	currentEnvironment.put(\batteryPath, "/Users/Shared/Battery 4 Factory Library/Samples/Drums/");
@@ -77,6 +78,10 @@
 				"\n\nFiles for Algomech".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/Algomech/*");
 			}
+			{msg[1].asString == "supercontinent"} {
+				"\n\nFiles for SuperContinent".postln;
+				~dirt.loadSoundFiles(~samplesPath++"/supercontinent/*");
+			}
 			{msg[1].asString == "midiin"} {
 				(~setupPath++"/SCModules/MidiIn.scd").load();
 			}
@@ -84,9 +89,9 @@
 				(~setupPath++"/SCModules/MidiOut.scd").load();
 			}
 			{msg[1].asString == "synths"} {
+				(~setupPath++"/SCModules/synthDef.scd").load();
 				"\n\nDiego's synths".postln;
 				"/Users/khoparzi/Dev/Live-Coding/diegodorado-tidal-synths/loadAll.scd".load();
-				(~setupPath++"/SCModules/synthDef.scd").load();
 				currentEnvironment.put(\renickPath, "/Users/khoparzi/Dev/Live-Coding/tidal-playground/synths/");
 				(~setupPath++"/SCModules/RenickSynths.scd").load();
 			};
@@ -100,3 +105,5 @@
 			~dirt.freeSoundFiles([msg[1].asSymbol]);
 			}, '/freeSample', nil, 57120);
 	)
+
+s.scope

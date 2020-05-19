@@ -162,6 +162,7 @@ SynthDef(\acid, {
   var sound = DirtPan.ar(carrier, ~dirt.numChannels, pan, envGen);
   Out.ar(out, sound);
 }).add;
+
 SynthDef(\sinosc, {
   |out, sustain = 1, freq = 440, speed = 1, begin=0, end=1, pan=0.5, accelerate, offset|
   var env, envTimes, envGen, line, sound, rate, phase;
@@ -357,5 +358,13 @@ SynthDef(\ikclick, { arg out = 0, gate = 1, centerFreq = 15000, rq = 0.9, mul = 
     noise = PinkNoise.ar(env);
     sig = BPF.ar(noise, centerFreq.max(1), rq, mul).fold(-1, 1);
     Out.ar(out, Pan2.ar(sig, pan, amp.curvelin(0, 1, 0, 1, log(10))));
+}).add;
+// From Algomech ensemble
+SynthDef(\fander, { |out, amp=1, att=0, dec=0, sus=0.5,  rel=0, pan=0, accelerate=0, freq=440, carP=1, modP=1, moduP =2, index=10, mul=0.1, detune=0, at=0, de=0.2, su=1, re=1|
+  var env = EnvGen.ar(Env.adsr(att, dec, sus, rel));
+  var mod = SinOsc.ar(freq * modP * EnvGen.kr(Env.adsr(at, de,su,re,2,-4,0)), 0, freq * index * LFNoise1.kr(5.reciprocal).abs);
+  var modu = SinOsc.ar(freq * moduP * EnvGen.kr(Env.adsr(at, de,su,re,2,-4,0)), 0, freq * index * LFNoise1.kr(5.reciprocal).abs);
+  var car = SinOsc.ar(([freq, freq+detune] * carP) + [mod + modu], 0, mul);
+  OffsetOut.ar(out, Pan2.ar(car * env, pan, amp * 2));
 }).add;
 );

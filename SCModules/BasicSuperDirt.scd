@@ -1,6 +1,6 @@
 (//
 s.waitForBoot {
-	~dirt = SuperDirt(2, s); // two output channels, increase if you want to pan across more channels
+	~dirt = SuperDirt(s.options.numOutputBusChannels, s); // two output channels, increase if you want to pan across more channels
 	~dirt.loadSoundFiles;   // load samples
 	s.sync;
 	if (s.options.outDevice == "JackBridge",

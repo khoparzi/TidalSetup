@@ -18,6 +18,9 @@
 	OSCdef.new(\exit, {
 		s.quit;
 		}, '/exit', nil, 57120);
+	OSCdef.new(\reboot, {
+		s.reboot;
+		}, '/reboot', nil, 57120);
 	OSCdef.new(\record, {
 		s.record;
 		}, '/record', nil, 57120);
@@ -26,7 +29,7 @@
 		}, '/stoprecord', nil, 57120);
 
 	// All the sample loading
-	OSCdef.new(\loadSample, {
+	OSCdef.new(\loadBank, {
 		arg msg;
 		// msg[0] ++ ":" ++ msg[1].postln;
 		case
@@ -95,15 +98,25 @@
 				currentEnvironment.put(\renickPath, "/Users/khoparzi/Dev/Live-Coding/tidal-playground/synths/");
 				(~setupPath++"/SCModules/RenickSynths.scd").load();
 			};
-		}, '/loadSample', nil, 57120);
+		}, '/loadBank', nil, 57120);
 		OSCdef.new(\loadFolders, {
 			arg msg;
 			~dirt.loadSoundFiles(msg[1].asString);
 		}, '/loadFolders', nil, 57120);
-		OSCdef.new(\freeSample, {
+		OSCdef.new(\loadFolder, {
+			arg msg;
+			var folderKey = msg[1].asString().split($\:);
+			if (folderKey.size>1, {
+				~dirt.loadSoundFileFolder(folderKey[0], folderKey[1].asSymbol);
+				},
+				{
+				~dirt.loadSoundFileFolder(folderKey[0], folderKey.asSymbol);
+			});
+		}, '/loadFolder', nil, 57120);
+		OSCdef.new(\freeBank, {
 			arg msg;
 			~dirt.freeSoundFiles([msg[1].asSymbol]);
-			}, '/freeSample', nil, 57120);
+			}, '/freeBank', nil, 57120);
 	)
 
 s.scope

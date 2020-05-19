@@ -18,7 +18,7 @@ globalUDPRef = unsafePerformIO $ OSC.openUDP "127.0.0.1" 57120
 
 -- | Takes a path and an argument (both strings)
 -- | and sends them to SCLang
--- oscStringMessage :: String -> String -> IO ()
+-- | oscStringMessage :: String -> String -> IO ()
 oscStringMessage path str = FD.sendMessage globalUDPRef $ OSC.Message path [OSC.string str]
 
 -------------------------------------------------------------------------------
@@ -393,6 +393,9 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     dubd p = sometimes (stut (choose[4, 8]) 0.0125 (1/8)) $ p
     dubd' d p = sometimes (stut (choose[4, 8]) d (1/8)) $ p
     dubd'' d t p = sometimes (stut (choose[4, 8]) d t) $ p
+    stbdub d p = sometimesBy d (stut (choose[4, 8]) en en) $ p
+    stbdub' d t p = sometimesBy d (stut (choose[4, 8]) en t) $ p
+    stbdub'' d t f p = sometimesBy d (stut (choose[4, 8]) f t) $ p
     crumble = slow 2 $ sound "[k*16 ~]/2 ~" # n (run 32)
     uppit p = spread fast [1, 2, 3, 4, 5, 7, 8] $ p
     ruppit p = spread fast [1, 2, 3, 4] $ p
@@ -412,8 +415,8 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     crushit p = (# crush (range 3 8 $ slow 1.1 tri)) $ p
     messup = fuckery
     messitup = fuckery
-    funcSpread p = spread ($) p
-    funcySpread p = spreadChoose ($) p
+    funkSpread = spread ($)
+    funkySpread = spreadChoose ($)
 
 -- Utility values
 let bassCut = 0 -- for live performances
@@ -449,16 +452,23 @@ let deepbass = s "beben" # n 1
     bd808' a = s "808bd" # n a
     -- Drums
     breaks = s "breaks"
+    breaks8 p = slice 8 p $ s "breaks"
     breaks16 p = slice 16 p $ s "breaks"
     breaks32 p = slice 32 p $ s "breaks"
     breaksp16 p = splice 16 p $ s "breaks"
     breaksp32 p = splice 32 p $ s "breaks"
     jukeclap = s "jukeit" # n 3
-    load s = oscStringMessage "/loadSample" s
+    loadVis = oscStringMessage "/loadVis" ""
+    load s = oscStringMessage "/loadBank" s
     loadFolder s = oscStringMessage "/loadFolder" s
+    loadFolders s = oscStringMessage "/loadFolders" s
+    -- loadMaschine s = oscStringMessage "/loadFolder" ("/Users/khoparzi/Documents/Native Instruments/Maschine 2/Groups/" ++ s)
     loadPath s = oscStringMessage "/loadPath" s
-    free s = oscStringMessage "/freeSample" s
+    free s = oscStringMessage "/freeBank" s
     quitsc = oscStringMessage "/exit" ""
+    rebootsc = oscStringMessage "/reboot" ""
+    record = oscStringMessage "/record" ""
+    stoprecord = oscStringMessage "/stoprecord" ""
 
 -- Params to control visuals
 let vis = p "vis" . (|< s "dummy")

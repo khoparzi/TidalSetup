@@ -1,0 +1,10 @@
+~visCAddr = NetAddr.new(~visAddr, 3335);
+~visCAddr.sendMsg("/fullscreen", true);
+~visCAddr.sendMsg("/ui", true);
+~visCAddr.sendMsg("/beat", true);
+~visCAddr.sendMsg("/zmin", 0);
+~visCAddr.sendMsg("/zmax", 1900);
+~visCAddr.sendMsg("/bloom", true);
+~visCAddr.sendMsg("/pixelate", true);
+~visCAddr.sendMsg("/kaleid", true);
+~visCAddr.sendMsg("/godray", true);

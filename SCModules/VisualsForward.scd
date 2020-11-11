@@ -6,7 +6,7 @@
 		)
 	}.defer;
 	{var visAddr = NetAddr.new(~visAddr, 3334);
-	"\n\nConnecting to Hydra".postln;
+	"\n\nConnecting to Visuals".postln;
 	// Hydra Forwarding
 	OSCFunc({ |msg, time, tidalAddr|
 		var latency = time - Main.elapsedTime;

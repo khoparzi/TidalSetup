@@ -11,7 +11,7 @@
 	OSCdef.new(\loadVis, {
 		arg msg;
 		msg[0].postln; msg[1].postln;
-		(~setupPath++"/SCModules/HydraForward.scd").load();
+		(~setupPath++"/SCModules/VisualsForward.scd").load();
 		~visCAddr = NetAddr.new(~visAddr, 3335);
 		}, '/loadVis', nil, 57120);
 

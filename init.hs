@@ -405,6 +405,10 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     someflip = sometimes (fast "1 [2 1]")
     oftflip = often (fast "1 [2 1]")
     rareflip = rarely (fast "1 [2 1]")
+    htrapper = within (0.5, 0.75) (hurry "1 <3 1.5>")
+    ftrapper = within (0.5, 0.75) (fast "1 <3 1.5>")
+    ftrapper' s r = within (s, s + r) (fast "<3 1.5>")
+    htrapper' s r = within (s, s + r) (hurry "<3 1.5>")
     microd p = often ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
     microd' p = rarely ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
     microstb' a p = stb a ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
@@ -428,7 +432,6 @@ let f = pF "f"
     cfreq = pF "centerFreq"
     mul = pF "mul"
     scw a p = ((# s "scw-one") . (# loop a)) $ p
-    sinew p = ((# s "tutorial5")) $ p
 
 let deepbass = s "beben" # n 1
     orgbass = s "beben" # n 5
@@ -491,15 +494,55 @@ let vis = p "vis" . (|< s "dummy")
     vs = pF "vs"
     saxis = pS "saxis"
 
+-- Params for moogbass
+chor = pF "chor"
+
+-- Params for SuperFM synth
+-- Taken from https://club.tidalcycles.org/t/superfm/1761/14
+
+-- sets the amount of operator 'op' in the superfm output mix
+-- (1 <= op <= 6)
+fmamp :: Int -> Pattern Double -> ControlPattern
+fmamp op = pF ("amp" ++ show op)
+
+-- sets the ratio for operator 'op'.
+-- the frequency is note * ratio + detune Hz
+-- (1 <= op <= 6)
+fmratio :: Int -> Pattern Double -> ControlPattern
+fmratio op = pF ("ratio" ++ show op)
+
+-- set the detune for operator 'op'
+fmdetune :: Int -> Pattern Double -> ControlPattern
+fmdetune op = pF ("detune" ++ show op)
+
+-- set the modulation of oerator opa by operator opb
+-- if opa == opb, then the modulation amount is multiplied by the
+-- 'feedback' parameter
+fmmod :: Int -> Int -> Pattern Double -> ControlPattern
+fmmod opa opb = pF ("mod" ++ show opa ++ show opb)
+
+-- feedback
+fmfeedback :: Pattern Double -> ControlPattern
+fmfeedback = pF "feedback"
+
+-- Envelope definition: each operator has an envelop with 4 steps
+fmeglevel :: Int -> Int -> Pattern Double -> ControlPattern
+fmeglevel op step = pF ("eglevel" ++ show op ++ show step)
+
+-- Envelope definition: sets the rate at which the envelope moves
+-- between steps.  Low numbers are slow, high numbers are fast.
+fmegrate :: Int -> Int -> Pattern Double -> ControlPattern
+fmegrate op step = pF ("egrate" ++ show op ++ show step)
+
 -- For muting
-let d1m = p 1 $ silence
-    d2m = p 2 $ silence
-    d3m = p 3 $ silence
-    d4m = p 4 $ silence
-    d5m = p 5 $ silence
-    d6m = p 6 $ silence
-    d7m = p 7 $ silence
-    d8m = p 8 $ silence
+let d1m = p 1 $ (silence)
+    d2m = p 2 $ (silence)
+    d3m = p 3 $ (silence)
+    d4m = p 4 $ (silence)
+    d5m = p 5 $ (silence)
+    d6m = p 6 $ (silence)
+    d7m = p 7 $ (silence)
+    d8m = p 8 $ (silence)
 -- Mute patterns every x cycles
     d1m' a = p 1 . (|< orbit 0) . (every a (const "~"))
     d2m' a = p 2 . (|< orbit 1) . (every a (const "~"))

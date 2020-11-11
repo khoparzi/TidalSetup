@@ -164,7 +164,7 @@ SynthDef(\acid, {
 }).add;
 
 SynthDef(\sinosc, {
-  |out, sustain = 1, freq = 440, speed = 1, begin=0, end=1, pan=0.5, accelerate, offset|
+  |out, sustain = 0.1, freq = 440, speed = 1, begin=0, end=0.1, pan=0.5, accelerate, offset|
   var env, envTimes, envGen, line, sound, rate, phase;
   envTimes = [1,100];
   envTimes = envTimes/envTimes.sum;
@@ -367,4 +367,31 @@ SynthDef(\fander, { |out, amp=1, att=0, dec=0, sus=0.5,  rel=0, pan=0, accelerat
   var car = SinOsc.ar(([freq, freq+detune] * carP) + [mod + modu], 0, mul);
   OffsetOut.ar(out, Pan2.ar(car * env, pan, amp * 2));
 }).add;
+// A subbass Synth with a sine wave
+SynthDef(\subbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0 ratio = 3 pan = 0.0 phaserdepth = 0|
+	var osc1, osc2, filter, env, filterenv;
+
+	osc1 = SinOsc.ar(freq);
+	osc2 = SinOsc.ar(freq * ratio, phaserdepth);
+
+	filterenv = EnvGen.ar(Env.adsr(0.0, 0.5, 0.2, 0.2), gate, doneAction: 2);
+	filter = RLPF.ar((osc1 * 0.75) + (osc2 * 0.12), cutoff * filterenv + 100, rq);
+
+	env = EnvGen.ar(Env.adsr(0.01, 0.0, 0.9, 0.05), gate, doneAction:2);
+
+	Out.ar(out, Pan2.ar(filter * env * amp * 2, pan));
+	}).add;
+// A phase modulated bass Synth
+SynthDef(\pmbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0.5 ratio = 3 pan = 0.0 phaserdepth = 0|
+	var osc, filter, env, filterenv;
+
+	osc = PMOsc.ar(freq, freq * ratio, phaserdepth);
+
+	filterenv = EnvGen.ar(Env.adsr(0.0, 0.5, 0.2, 0.2), gate, doneAction: 2);
+	filter = RLPF.ar(osc, cutoff * filterenv + 100, rq);
+
+	env = EnvGen.ar(Env.adsr(0.0, 0.0, 0.9, 0.05), gate, doneAction:2);
+
+	Out.ar(out, Pan2.ar(filter * env * amp * 2, pan));
+	}).add;
 );

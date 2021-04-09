@@ -124,7 +124,8 @@
 			}, '/startrms', nil, 57120);
 		OSCdef.new(\openscope, {
 			arg msg;
-			s.scope
+			s.scope;
+			s.freqscope;
 			}, '/openscope', nil, 57120);
 		OSCdef.new(\showsynths, {
 			arg msg;
@@ -133,42 +134,3 @@
 			SynthDescLib.global.browse;
 			}, '/showsynths', nil, 57120);
 	)
-
-
-/*VSTPlugin.search(s, "~/.vst_linvst")
-VSTPlugin.clear*/
-({
-	q = q ? ();
-    ("\n loading VST Effects \n ").postln;
-    q.busses0 = ~dirt.orbits.collect(_.dryBus) ++ 0;
-
-	(
-		SynthDef(\insertVst, { | buz = 0|
-            var out = Select.kr( buz, q.busses0 );
-			ReplaceOut.ar(out, VSTPlugin.ar( In.ar(out, ~dirt.numChannels), ~dirt.numChannels ));
-		}).add;
-	);
-    s.sync;
-	0.2.wait;
-
-	// Master Effect
-	// VSTPlugin.pluginKeys(s)
-	// add a group after default group
-	~masterFxGroup = Group.after(1);
-    s.sync;
-	0.1.wait;
-    (
-        ~oscilloscope = VSTPluginController(
-            Synth( \insertVst,[ \buz, ( q.busses0.last ) ], target: ~masterFxGroup , addAction: 'addToTail')
-        ).open( "MOscilloscope", editor: true );
-    );
-	s.sync;
-    0.2.wait;
-	/*
-	~oscilloscope.info.parameters.do{|v|v.postln};
-    ~oscilloscope.close;
-    ~oscilloscope.editor;
-	~oscilloscope.gui;
-	*/
-	// s.sync;
-}.fork;)

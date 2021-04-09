@@ -316,8 +316,6 @@ let snl  = grp [mF "sound",   mF "n", mF "legato"]
     eq' h b l q = cutoff l # resonance q # bandf b # bandq q # hcutoff h # hresonance q
     tremolo' r d = tremolorate r # tremolodepth d
     phaser' r d = phaserrate r # phaserdepth d
-    grain' = grp [mF "begin", mF "end"]
-    grain s w = begin s # end (s + w)
     grain8 s w = begin (en' s) # end ((en' s) + w)
     grain16 s w = begin (sn' s) # end ((sn' s) + w)
 
@@ -402,6 +400,7 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     crippery p = every 4 (jux (# accelerate "[-0.1..0.2]/4")) $ every 6 (jux (# accelerate "[-0.3..0.4]/2")) $ p
     rater = rarely (iter (cs 1 [4,8]))
     fastflip = fast "1 [2 1]"
+    withflip = within (0.75, 1) (fast 2)
     someflip = sometimes (fast "1 [2 1]")
     oftflip = often (fast "1 [2 1]")
     rareflip = rarely (fast "1 [2 1]")
@@ -469,10 +468,12 @@ let deepbass = s "beben" # n 1
     -- loadMaschine s = oscStringMessage "/loadFolder" ("/Users/khoparzi/Documents/Native Instruments/Maschine 2/Groups/" ++ s)
     loadPath s = oscStringMessage "/loadPath" s
     free s = oscStringMessage "/freeBank" s
+    superdirt = oscStringMessage "/superdirt" ""
     quitsc = oscStringMessage "/exit" ""
     rebootsc = oscStringMessage "/reboot" ""
     record = oscStringMessage "/record" ""
     stoprecord = oscStringMessage "/stoprecord" ""
+    startlink = oscStringMessage "/startlink" ""
 
 -- Params to control visuals
 let vis = p "vis" . (|< s "dummy")
@@ -535,14 +536,14 @@ fmegrate :: Int -> Int -> Pattern Double -> ControlPattern
 fmegrate op step = pF ("egrate" ++ show op ++ show step)
 
 -- For muting
-let d1m = p 1 $ (silence)
-    d2m = p 2 $ (silence)
-    d3m = p 3 $ (silence)
-    d4m = p 4 $ (silence)
-    d5m = p 5 $ (silence)
-    d6m = p 6 $ (silence)
-    d7m = p 7 $ (silence)
-    d8m = p 8 $ (silence)
+let d1m = p 1 . (const "~")
+    d2m = p 2 . (const "~")
+    d3m = p 3 . (const "~")
+    d4m = p 4 . (const "~")
+    d5m = p 5 . (const "~")
+    d6m = p 6 . (const "~")
+    d7m = p 7 . (const "~")
+    d8m = p 8 . (const "~")
 -- Mute patterns every x cycles
     d1m' a = p 1 . (|< orbit 0) . (every a (const "~"))
     d2m' a = p 2 . (|< orbit 1) . (every a (const "~"))

@@ -1,0 +1,45 @@
+-- From jArm https://gist.github.com/jarmitage/627a7d5a9263475ba53f725f1405d6a2
+-- sequence generators
+let r = run
+    ri a = rev (r a) -- run inverted
+    -- rd a = (0 - (r a)) -- run down e.g. (10 - (r 10))
+    c = choose
+    odd    a = (((r a) + 1) * 2) - 1 -- run of odd numbers
+    even   a =  ((r a) + 1) * 2 -- run of even numbers
+    -- codd   a = c (patToList (odd   a)) -- choose odd
+    -- ceven  a = c (patToList (even  a)) -- choose even
+    oddi   a = rev (odd a) -- odd inverted
+    eveni  a = rev (even a) -- even inverted
+    qn = (1/4)
+    en = (1/8)
+    qv = (1/8)
+    sn = (1/16)
+    sqv = (1/16) -- Semi quaver
+    tn = (1/32)
+    dsqv = (1/32) -- Demi Semi quaver
+    hdsqv = (1/64)  -- Hemi Demi Semi quaver
+    qn' m = (1/4) * m
+    en' m = (1/8) * m
+    qv' m = (1/8) * m
+    sn' m = (1/16) * m
+    sqv' m = (1/16) * m
+    tn' m = (1/32) * m
+    dsqv' m = (1/32) * m
+    hdsqv' m = (1/64) * m
+    -- Time division runs
+    qnr = (r 4) * (1/4)
+    enr = (r 8) * (1/8)
+    qvr = (r 8) * (1/8)
+    snr = (r 16) * (1/16)
+    sqvr = (r 16) * (1/16) -- Semi quaver
+    tnr = (r 32) * (1/32)
+    dsqvr = (r 32) * (1/32) -- Demi Semi quaver
+    hdsqvr = (r 64) * (1/64)  -- Hemi Demi Semi quaver
+    qnr' m = (r m) * (1/4)
+    enr' m = (r m) * (1/8)
+    qvr' m = (r m) * (1/8)
+    snr' m = (r m) * (1/16)
+    sqvr' m = (r m) * (1/16)
+    tnr' m = (r m) * (1/32)
+    dsqvr' m = (r m) * (1/32)
+    hdsqvr' m = (r m) * (1/64)

@@ -1,6 +1,6 @@
 (
 	s.options.numOutputBusChannels = 2;
-	currentEnvironment.put(\setupPath, "/Users/khoparzi/Dev/Live-Coding/setup/");
+	currentEnvironment.put(\setupPath, "/Users/khoparzi/Dev/TidalSetup/");
 	currentEnvironment.put(\samplesPath, "/Users/khoparzi/Music/Samples/");
 	currentEnvironment.put(\batteryPath, "/Users/Shared/Battery 4 Factory Library/Samples/Drums/");
 
@@ -83,8 +83,8 @@
 				"\n\nFiles for collabs".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/collab/*");
 			}
-			{msg[1].asString == "algomech"} {
-				"\n\nFiles for Algomech".postln;
+			{msg[1].asString == "ignoto"} {
+				"\n\nFiles for ignoto".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/ignoto/*");
 			}
 			{msg[1].asString == "supercontinent"} {

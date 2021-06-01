@@ -1,7 +1,7 @@
-(
 	s.options.numOutputBusChannels = 2;
 	currentEnvironment.put(\setupPath, "/Users/khoparzi/Dev/TidalSetup/");
 	currentEnvironment.put(\samplesPath, "/Users/khoparzi/Music/Samples/");
+(// With minimal samples, four orbits
 	currentEnvironment.put(\batteryPath, "/Users/Shared/Battery 4 Factory Library/Samples/Drums/");
 
 	(~setupPath++"/SCModules/BasicSuperDirt.scd").load();

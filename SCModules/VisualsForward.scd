@@ -13,7 +13,7 @@
 		msg = msg ++ ["time", time, "latency", latency];
 		// msg.postln;
 		visAddr.sendBundle(latency, msg)
-	}, '/play2').fix;}.defer(1);
+	}, '/dirt/play').fix;}.defer(1);
 
 	SynthDef(\dummy, { |out, sustain = 1, speed = 1, begin = 0, end = 1, pan, accelerate, offset|
 		var env, sound, rate, phase;

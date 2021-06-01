@@ -57,6 +57,12 @@
 			{msg[1].asString == "breaks"} {
 				(~setupPath++"/SCModules/BreaksSamples.scd").load();
 			}
+			{msg[1].asString == "bt"} {
+				(~setupPath++"/SCModules/BreakTweaker.scd").load();
+			}
+			{msg[1].asString == "iris"} {
+				(~setupPath++"/SCModules/Iris.scd").load();
+			}
 			{msg[1].asString == "scw"} {
 				(~setupPath++"/SCModules/SingleCycleWaveforms.scd").load();
 			}
@@ -79,7 +85,7 @@
 			}
 			{msg[1].asString == "algomech"} {
 				"\n\nFiles for Algomech".postln;
-				~dirt.loadSoundFiles(~samplesPath++"/Algomech/*");
+				~dirt.loadSoundFiles(~samplesPath++"/ignoto/*");
 			}
 			{msg[1].asString == "supercontinent"} {
 				"\n\nFiles for SuperContinent".postln;
@@ -90,6 +96,12 @@
 			}
 			{msg[1].asString == "midiout"} {
 				(~setupPath++"/SCModules/MidiOut.scd").load();
+			}
+			{msg[1].asString == "linuxmidi"} {
+				MIDIClient.init;
+				MIDIClient.list;
+				~midiOut = MIDIOut.newByName("Midi Through", "Midi Through Port-0");
+				~dirt.soundLibrary.addMIDI(\nixmidi, ~midiOut);
 			}
 			{msg[1].asString == "synths"} {
 				(~setupPath++"/SCModules/synthDef.scd").load();
@@ -133,4 +145,25 @@
 			SynthDescLib.global.read;
 			SynthDescLib.global.browse;
 			}, '/showsynths', nil, 57120);
+		OSCdef.new(\nosidechain, {
+			arg msg;
+			~dirt.orbits[0].outBus = 0;
+			~bus.free;
+			"\n\nNo Sidechain now".postln;
+			}, '/noside', nil, 57120);
+		OSCdef.new(\sidechained, {
+			arg msg;
+			// Sidechain d1 with d2
+			~bus = Bus.audio(s, numChannels:2);
+			~dirt.orbits[0].outBus = ~bus;
+			(
+				Ndef(\d1side, {
+					var control = InBus.ar(~dirt.orbits[1].dryBus, 2).sum;
+					var dirt = InBus.ar(~bus, 2);
+					Compander.ar(dirt, control, thresh: 0.001, slopeBelow: 1.0,
+						slopeAbove: 0.651, clampTime: 0.05, relaxTime: 0.1)
+					}).play;
+				"\n\nd1 is now sidechained by d2".postln;
+				)
+			}, '/sidechained', nil, 57120);
 	)

@@ -8,20 +8,6 @@ import Data.Maybe
 import Control.Applicative
 
 -------------------------------------------------------------------------------
-import qualified Sound.OSC as OSC
-import qualified Sound.OSC.FD as FD
-import System.IO.Unsafe (unsafePerformIO)
-
--- | Global reference of the UDP port used to
--- | communicate with SCLang
-globalUDPRef = unsafePerformIO $ OSC.openUDP "127.0.0.1" 57120
-
--- | Takes a path and an argument (both strings)
--- | and sends them to SCLang
--- | oscStringMessage :: String -> String -> IO ()
-oscStringMessage path str = FD.sendMessage globalUDPRef $ OSC.Message path [OSC.string str]
-
--------------------------------------------------------------------------------
 
 -- Aliases
 let inter = interlace
@@ -461,19 +447,6 @@ let deepbass = s "beben" # n 1
     breaksp16 p = splice 16 p $ s "breaks"
     breaksp32 p = splice 32 p $ s "breaks"
     jukeclap = s "jukeit" # n 3
-    loadVis = oscStringMessage "/loadVis" ""
-    load s = oscStringMessage "/loadBank" s
-    loadFolder s = oscStringMessage "/loadFolder" s
-    loadFolders s = oscStringMessage "/loadFolders" s
-    -- loadMaschine s = oscStringMessage "/loadFolder" ("/Users/khoparzi/Documents/Native Instruments/Maschine 2/Groups/" ++ s)
-    loadPath s = oscStringMessage "/loadPath" s
-    free s = oscStringMessage "/freeBank" s
-    superdirt = oscStringMessage "/superdirt" ""
-    quitsc = oscStringMessage "/exit" ""
-    rebootsc = oscStringMessage "/reboot" ""
-    record = oscStringMessage "/record" ""
-    stoprecord = oscStringMessage "/stoprecord" ""
-    startlink = oscStringMessage "/startlink" ""
 
 -- Params to control visuals
 let vis = p "vis" . (|< s "dummy")
@@ -544,6 +517,7 @@ let d1m = p 1 . (const "~")
     d6m = p 6 . (const "~")
     d7m = p 7 . (const "~")
     d8m = p 8 . (const "~")
+
 -- Mute patterns every x cycles
     d1m' a = p 1 . (|< orbit 0) . (every a (const "~"))
     d2m' a = p 2 . (|< orbit 1) . (every a (const "~"))

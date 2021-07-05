@@ -11,6 +11,8 @@ import Control.Applicative
 
 -- :script /Users/khoparzi/Dev/TidalSetup/TidalModules/OSCSender.hs
 
+:script /Users/khoparzi/Dev/TidalSetup/TidalModules/SampleLoader.hs
+
 :script /Users/khoparzi/Dev/TidalSetup/TidalModules/AbbrevAliases.hs
 
 -- :script /Users/khoparzi/Dev/TidalSetup/TidalModules/VisualParams.hs

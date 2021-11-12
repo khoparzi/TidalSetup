@@ -1,3 +1,58 @@
+(SynthDef(\plaits, {|out, begin=0, end=1, sustain=1, pan=0.5, accelerate, freq, harm=0.5, timbre=0.5, morph=0.5, engine=0, speed = 1|
+	// var line = Line.ar(begin, end, sustain, doneAction:2);
+	// var env = Env([0, 1, 0],[1,5], curve:2);
+    // var envGen = IEnvGen.ar(env, line * env.times.sum * abs(speed));
+	var sound = MiPlaits.ar(
+			pitch: freq.cpsmidi,
+			engine: engine,
+			harm: harm,
+			timbre: timbre,
+			morph: morph
+		);
+	// Out.ar(out, Pan2.ar(sound, pan));
+	// OffsetOut.ar(out,
+	// 	Pan2.ar(sound, ~dirt.numChannels, pan)
+	// )
+	OffsetOut.ar(out,
+		DirtPan.ar(sound, ~dirt.numChannels, pan)
+	)
+}).add);
+
+x = { Pan2(MiPlaits.ar(35, 0, harm: 0.252, morph: 0.2, mul: 0.2), 2, 0.5) }.play
+x.free
+
+
+(
+	// Setup FX addition
+	~busses = ~dirt.orbits.collect(_.dryBus) ++ 0;
+
+	SynthDef(\dirt_vst_fx, { | buz = 0|
+		var out = Select.kr(buz, ~busses);
+		ReplaceOut.ar(out, VSTPlugin.ar( In.ar(out, ~dirt.numChannels), ~dirt.numChannels ));
+	}).add;
+)
+
+(
+	// Add compressor to first orbit
+	//-----------------------------------------------------------------------------
+	{
+		~vst0Orb0 = Synth("dirt_vst_fx", [ \buz, 0 ], ~dirt.orbits[0].group, addAction: \addAfter);
+		~comp0Orb0 = VSTPluginController(~vst0Orb0).open( "MSaturator.vst3", editor: true ); { ~comp0Orb0.gui }.defer;
+		// ~comp0Orb0.readProgram("mypresetfolder/text.fxp");
+	}.fork;
+
+	// Add compressor to fifth orbit
+	//-----------------------------------------------------------------------------
+	{
+		~vst0Orb5 = Synth("dirt_vst_fx", [ \buz, 0 ], ~dirt.orbits[4].group, addAction: \addAfter);
+		~comp0Orb5 = VSTPluginController(~vst0Orb5).open( "MOscilloscope.vst3", editor: true ); { ~comp0Orb5.gui }.defer;
+		// ~comp0Orb5 = VSTPluginController(~vst0Orb5).open( "iZotope Trash 2", editor: true ); { ~comp0Orb5.gui }.defer;
+	}.fork;
+)
+
+~comp0Orb0.gui
+~vst0Orb0.info.PrintPrograms
+
 
 VSTPlugin.search(s, "~/.vst_linvst")
 VSTPlugin.clear

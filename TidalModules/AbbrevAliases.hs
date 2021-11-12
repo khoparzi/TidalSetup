@@ -126,6 +126,10 @@ let sl8 s p = ((# begin ((1/8)*s)) . (# end ((1/8)*(s+1)))) $ p
     sl16 s p = ((# begin ((1/16)*s)) . (# end ((1/16)*(s+1)))) $ p
     sl32 s p = ((# begin ((1/32)*s)) . (# end ((1/32)*(s+1)))) $ p
 
+-- Grain shorthands
+    grain8 s w = begin ((1/8) * s) # end (((1/8) * s) + w)
+    grain16 s w = begin ((1/16) * s) # end (((1/16) * s) + w)
+
 -- From jArm https://gist.github.com/jarmitage/627a7d5a9263475ba53f725f1405d6a2
 -- FX groups
 let snl  = grp [mF "sound",   mF "n", mF "legato"]

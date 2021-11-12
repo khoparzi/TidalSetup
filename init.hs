@@ -31,4 +31,6 @@ import Control.Applicative
 
 :script /Users/khoparzi/Dev/TidalSetup/TidalModules/MutingAliases.hs
 
+-- :script /Volumes/QuadData/Dev/TidalSetup/TidalModules/Redirt.hs
+
 :set prompt "GoBombastic!>"

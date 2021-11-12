@@ -1,3 +1,4 @@
+:{
 let deepbass = s "beben" # n 1
     orgbass = s "beben" # n 5
     orgbass2 = s "beben" # n 15
@@ -21,9 +22,20 @@ let deepbass = s "beben" # n 1
     bd808' a = s "808bd" # n a
     -- Breaks
     breaks = s "breaks"
+    carelessbreak = s "breaks" # n 34
+    championbreak = s "breaks" # n 36
+    darksidebreak = s "breaks" # n 53
+    differencebreak = s "breaks" # n 59
+    firstcontactbreak = s "breaks" # n 71
+    futurebreak = s "breaks" # n 75
+    gamesbreak = s "breaks" # n 76
+    helibreak = s "breaks" # n 89
+    libertybreak = s "breaks" # n 104
+    bulldozeramen = s "breaks" # n 30
     breaks8 p = slice 8 p $ s "breaks"
     breaks16 p = slice 16 p $ s "breaks"
     breaks32 p = slice 32 p $ s "breaks"
     breaksp16 p = splice 16 p $ s "breaks"
     breaksp32 p = splice 32 p $ s "breaks"
     jukeclap = s "jukeit" # n 3
+:}

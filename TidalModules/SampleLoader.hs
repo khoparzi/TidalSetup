@@ -18,3 +18,4 @@ let tosc m = sendOsc m ""
     rebootsc = sendOsc "/reboot" ""
     record = sendOsc "/record" ""
     stoprecord = sendOsc "/stoprecord" ""
+    iacLatency l = sendOsc "/iacLatency" l

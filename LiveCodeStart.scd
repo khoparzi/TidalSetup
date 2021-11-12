@@ -166,4 +166,14 @@
 				"\n\nd1 is now sidechained by d2".postln;
 				)
 			}, '/sidechained', nil, 57120);
+		OSCdef.new(\setsidechain, {
+			arg msg;
+			~bus = Bus.audio(s, numChannels:2);
+			{
+				if (msg.isNil == false,
+					{ ~scChannel = msg },
+					{ ~scChannel = 0; }
+				)
+			}.defer;
+			}, '/setsidechain', nil, 57120);
 	)

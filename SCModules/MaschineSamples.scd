@@ -17,6 +17,7 @@
 	~dirt.loadSoundFileFolder(maschinePath++"Conant\ Bump\ Kit\ Samples", \conant);
 	~dirt.loadSoundFileFolder(maschinePath++"Dubroots\ Kit\ Samples", \dubr);
 	~dirt.loadSoundFileFolder(maschinePath++"Ghetto\ Tech\ Kit\ Samples", \ghettot);
+	~dirt.loadSoundFileFolder(maschinePath++"House\ Voice\ Kit\ Samples", \housevoice);
 	~dirt.loadSoundFileFolder(maschinePath++"Imperial\ Kit\ Samples", \imperial);
 	~dirt.loadSoundFileFolder(maschinePath++"Juke\ It\ Kit\ Samples", \jukeit);
 	~dirt.loadSoundFileFolder(maschinePath++"Real\ Blue\ Drum\ Kit\ Samples", \realblue);

@@ -5,7 +5,7 @@
 			{ currentEnvironment.put(\visAddr, "127.0.0.1"); }
 		)
 	}.defer;
-	{var visAddr = NetAddr.new(~visAddr, 3334);
+	{var visAddr = NetAddr.new(~visAddr, 3333);
 	"\n\nConnecting to Visuals".postln;
 	// Hydra Forwarding
 	OSCFunc({ |msg, time, tidalAddr|

@@ -15,4 +15,5 @@
 	~dirt.loadSoundFileFolder(breakTweakPath++"12-Synth/Bass", \btbass);
 	~dirt.loadSoundFileFolder(breakTweakPath++"12-Synth/Chord", \btchord);
 	~dirt.loadSoundFileFolder(breakTweakPath++"9-Glitch", \btglitch);
+	~dirt.loadSoundFileFolder(breakTweakPath++"14-Cinematic Textures/Bass", \btcbass);
 )

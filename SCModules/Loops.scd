@@ -1,3 +1,3 @@
 "\n\nBasslines".postln;
 ~dirt.loadSoundFileFolder(~samplesPath++"/Loops/Basslines/", \bline);
-~dirt.loadSoundFiles(~samplesPath++"/basic/*");
+~dirt.loadSoundFiles(~samplesPath++"basic/*");

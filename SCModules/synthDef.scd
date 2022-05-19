@@ -163,36 +163,11 @@ SynthDef(\acid, {
   Out.ar(out, sound);
 }).add;
 
-SynthDef(\sinosc, {
-  |out, sustain = 0.1, freq = 440, speed = 1, begin=0, end=0.1, pan=0.5, accelerate, offset|
-  var env, envTimes, envGen, line, sound, rate, phase;
-  envTimes = [1,100];
-  envTimes = envTimes/envTimes.sum;
-  env = Env([0,1,0],envTimes);
-  line = Line.ar(0,1,sustain,doneAction:2);
-  envGen = IEnvGen.ar(env,line);
-  sound = SinOsc.ar(freq*speed)*envGen;
-  OffsetOut.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan, envGen));
-}).add;
-
 SynthDef(\dummy, { |out, sustain = 1, speed = 1, begin = 0, end = 1, pan, accelerate, offset|
 	var env, sound, rate, phase;
 	phase = Line.ar(begin, end, sustain);
 	rate = (begin + 1) * (speed + Sweep.kr(1, accelerate));
 	sound = DC.ar(0);
-	OffsetOut.ar(out,
-		DirtPan.ar(sound, ~dirt.numChannels, pan)
-	)
-}).add
-);
-
-(
-SynthDef(\click, { |out, sustain = 1, speed = 1, begin = 0, end = 1, pan, accelerate, offset|
-	var env, sound, rate, phase;
-	phase = Line.ar(begin, end, sustain);
-	rate = (begin + 1) * (speed + Sweep.kr(1, accelerate));
-	sound = Impulse.ar(0);
-	sound = Decay.ar(sound, sustain);
 	OffsetOut.ar(out,
 		DirtPan.ar(sound, ~dirt.numChannels, pan)
 	)
@@ -212,20 +187,6 @@ SynthDef(\stiff, { |out, sustain = 1, freq, amp=0.5, c3=20, pan, fB = 80, rel= 0
 	)
 }).add
 );
-
-SynthDef(\piano, { |out, sustain = 1, freq=440, /*gate, */ amp=0.5, rho=1, pan, offset|
-var env = EnvGen.ar( Env.asr(0,1,0.1), /*gate, */ timeScale:sustain, doneAction:2 );
-var sound = OteyPianoStrings.ar( freq, amp, rho:rho ) * env;
-OffsetOut.ar(out,
-DirtPan.ar(sound * 1, ~dirt.numChannels, LinLin.kr(freq,36.midicps,90.midicps,-0.75,0.75), env )
-)
-}).add;
-
-SynthDef(\piano_soundboard,{
-var audio = In.ar([20, 21], 2);
-audio = OteySoundBoard.ar(audio);
-Out.ar(0,audio);
-}).add;
 
 (
 SynthDef(\atari, { | out, freq, freqb=550, freqc=660, vola=15, volb=0, volc=0, chink=1, wobbly=1, pan, amp=0.1, /*gate, */ sustain = 1, offset|
@@ -263,8 +224,7 @@ SynthDef(\bow, { |out, freq, amp=0.5, force=1, /*gate, */ pos=0.07, c1=0.25, c3=
 }).add;
 );
 
-(
-SynthDef(\windsaw, { | out, offset, sustain = 1, freq, attack = 0.1, release = 5, decay = 3, amp = 0.3, /*maxosc = 20, loosc = 6,*/ maxamp = 2.5, loamp = 0.1, gate = 1, pan |
+(SynthDef(\windsaw, { | out, offset, sustain = 1, freq, attack = 0.1, release = 5, decay = 3, amp = 0.3, /*maxosc = 20, loosc = 6,*/ maxamp = 2.5, loamp = 0.1, gate = 1, pan |
 	var snd, env;
 	env = Env.adsr(
 		attackTime: attack,
@@ -286,8 +246,7 @@ SynthDef(\windsaw, { | out, offset, sustain = 1, freq, attack = 0.1, release = 5
 }).add;
 );
 
-(
-SynthDef(\saw, { | freq, amp = 0.1, att = 0.001, rel = 0.2, lofreq = 1000, hifreq = 3000, out, offset, pan |
+(SynthDef(\saw, { | freq, amp = 0.1, att = 0.001, rel = 0.2, lofreq = 1000, hifreq = 3000, out, offset, pan |
 	var env, snd;
 	env = Env.perc(
 		attackTime: att,
@@ -306,8 +265,7 @@ SynthDef(\saw, { | freq, amp = 0.1, att = 0.001, rel = 0.2, lofreq = 1000, hifre
 }).add;
 );
 
-(
-SynthDef(\bazz, { | freq, amp=0.01, attack = 0.025, decay = 0.6, release = 0.5, crunchy = 200, /*gate, */ out, pan, offset, sustain = 1 |
+(SynthDef(\bazz, { | freq, amp=0.01, attack = 0.025, decay = 0.6, release = 0.5, crunchy = 200, /*gate, */ out, pan, offset, sustain = 1 |
 	var snd, env, snd2, sum;
 	env = Env.adsr(
 		attackTime: attack, decayTime: decay, sustainLevel: 0.5, releaseTime: release
@@ -329,37 +287,7 @@ SynthDef(\bazz, { | freq, amp=0.01, attack = 0.025, decay = 0.6, release = 0.5, 
 }).add;
 );
 
-(
-SynthDef(\rhodes, { | out freq pan vel = 0.8 modind = 0.2 mix = 0.2 lfospeed = 0.4 lfodepth = 0.1 sustain = 1 gate = 1 |
-    var env1, env2, env3, env4;
-    var osc1, osc2, osc3, osc4, snd;
-    lfospeed = lfospeed * 12;
-    freq = freq * 2;
-    env1 = EnvGen.ar(Env.adsr(0.001, 1.25, 0.0, 0.04, curve: \lin));
-    env2 = EnvGen.ar(Env.adsr(0.001, 1.00, 0.0, 0.04, curve: \lin));
-    env3 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
-    env4 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
-    osc4 = SinOsc.ar(freq * 0.5) * 2pi * 2 * 0.535887 * modind * env4 * vel;
-    osc3 = SinOsc.ar(freq, osc4) * env3 * vel;
-    osc2 = SinOsc.ar(freq * 15) * 2pi * 0.108819 * env2 * vel;
-    osc1 = SinOsc.ar(freq, osc2) * env1 * vel;
-    snd = Mix((osc3 * (1 - mix)) + (osc1 * mix));
-    snd = snd * (SinOsc.ar(lfospeed) * lfodepth + 1);
-    // using the doneAction: 2 on the other envs can create clicks (bc of the linear curve maybe?)
-    snd = snd * EnvGen.ar(Env.asr(0, 1, 0.1), gate, doneAction: 2);
-    snd = Pan2.ar(snd, pan);
-    OffsetOut.ar(out,
-		DirtPan.ar(snd, ~dirt.numChannels, pan)
-	)
-}).add;
-SynthDef(\ikclick, { arg out = 0, gate = 1, centerFreq = 15000, rq = 0.9, mul = 25, pan = 0, amp = 1;
-    var env, noise, sig;
-    env = EnvGen.ar(Env.perc(0.001, 0.00001 * LFNoise1.kr(4).abs, 1, -4), gate, doneAction: 0);
-    noise = PinkNoise.ar(env);
-    sig = BPF.ar(noise, centerFreq.max(1), rq, mul).fold(-1, 1);
-    Out.ar(out, Pan2.ar(sig, pan, amp.curvelin(0, 1, 0, 1, log(10))));
-}).add;
-// From Algomech ensemble
+(// From Algomech ensemble
 SynthDef(\fander, { |out, amp=1, att=0, dec=0, sus=0.5,  rel=0, pan=0, accelerate=0, freq=440, carP=1, modP=1, moduP =2, index=10, mul=0.1, detune=0, at=0, de=0.2, su=1, re=1|
   var env = EnvGen.ar(Env.adsr(att, dec, sus, rel));
   var mod = SinOsc.ar(freq * modP * EnvGen.kr(Env.adsr(at, de,su,re,2,-4,0)), 0, freq * index * LFNoise1.kr(5.reciprocal).abs);
@@ -395,3 +323,43 @@ SynthDef(\pmbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0.5
 	Out.ar(out, Pan2.ar(filter * env * amp * 2, pan));
 	}).add;
 );
+
+(// A subbass Synth with a sine wave
+SynthDef(\subbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0 ratio = 3 pan = 0.0 phaserdepth = 0|
+	var osc1, osc2, filter, env, filterenv;
+
+	osc1 = SinOsc.ar(freq);
+	osc2 = SinOsc.ar(freq * ratio, phaserdepth);
+
+	filterenv = EnvGen.ar(Env.adsr(0.0, 0.5, 0.2, 0.2), gate, doneAction: 2);
+	filter = RLPF.ar((osc1 * 0.75) + (osc2 * 0.12), cutoff * filterenv + 100, rq);
+
+	env = EnvGen.ar(Env.adsr(0.01, 0.0, 0.9, 0.05), gate, doneAction:2);
+
+	Out.ar(out, Pan2.ar(filter * env * amp * 2, pan));
+	}).add;
+);
+
+(type:\dirt, dirt: ~dirt, s: \grrbass, n: -12, \release: 0.2).play;
+
+// (
+// SynthDef(\grrbass, {|out = 0 amp = 0.1 gate = 1 pan = 0.0|
+// 	var snd, auto, freq, trig, env;
+// 	freq = \freq.kr(40);
+// 	trig = ToggleFF.ar(Dust.ar(8));
+// 	auto = trig.lagud(0.1, 0.3);
+// 	snd = Saw.ar(freq);
+// 	snd = Splay.ar(snd);
+// 	snd = (snd * 3).fold2;
+// 	snd = RLPF.ar(snd, freq * 10, 0.1);
+// 	snd = (snd * 5).fold2;
+// 	snd = RLPF.ar(snd, freq * 8 * TRand.ar(1, 4, trig), 0.5);
+// 	snd = (snd * 5).fold2;
+// 	snd = MoogFF.ar(snd, auto.linexp(0, 1, 100, 8000), 0);
+// 	snd = snd + DelayC.ar(snd, 0.01, SinOsc.ar(0.5, [0, pi]).range(0, 0.001));
+// 	snd = (snd * 3.dbamp).tanh;
+//     env = EnvGen.ar(Env.adsr(0.1, 0.9, 0.9, 0.7), gate, doneAction:2);
+// 	// Out.ar(out, Pan2.ar(amp, pan));
+//     Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, 0.5));
+// }).add;
+// );

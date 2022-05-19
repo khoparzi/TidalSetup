@@ -88,3 +88,4 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     messitup = fuckery
     funkSpread = spread ($)
     funkySpread = spreadChoose ($)
+    restEvery m = every m (# silence)

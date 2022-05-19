@@ -2,7 +2,7 @@ import qualified Sound.OSC as OSC
 import qualified Sound.OSC.FD as FD
 import System.IO.Unsafe (unsafePerformIO)
 
--- sendOsc :: String -> String -> IO ()
+-- sendOsc :: OSC.Address_Pattern -> String -> IO ()
 let sendOsc path str = sendO False (sListen tidal) (head $ sCxs tidal) $ OSC.Message path [OSC.string str]
 
 let tosc m = sendOsc m ""

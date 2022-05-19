@@ -19,3 +19,7 @@ let tosc m = sendOsc m ""
     record = sendOsc "/record" ""
     stoprecord = sendOsc "/stoprecord" ""
     iacLatency l = sendOsc "/iacLatency" l
+    vstEditor s = sendOsc "/vstEditor" s
+    vstLoad s = sendOsc "/vstLoad" s
+    vstRead s = sendOsc "/vstRead" s
+    vstSave s = sendOsc "/vstSave" s

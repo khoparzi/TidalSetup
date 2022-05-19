@@ -20,3 +20,7 @@ let tosc m = sendOsc m ""
     stoprecord = sendOsc "/stoprecord" ""
     iacLatency l = sendOsc "/iacLatency" l
     sidechain = sendOsc "/sidechained" ""
+    vstEditor s = sendOsc "/vstEditor" s
+    vstLoad s = sendOsc "/vstLoad" s
+    vstRead s = sendOsc "/vstRead" s
+    vstSave s = sendOsc "/vstSave" s

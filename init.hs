@@ -38,5 +38,6 @@ import Control.Applicative
 :script /Users/khoparzi/Dev/TidalSetup/TidalModules/SuperFM.hs
 
 -- :script /Users/khoparzi/Dev/TidalSetup/TidalModules/Redirt.hs
+:script /Users/khoparzi/Dev/TidalSetup/TidalModules/vstFunctions.hs
 
 :set prompt "GoBombastic!>"

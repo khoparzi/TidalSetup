@@ -89,3 +89,7 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     funkSpread = spread ($)
     funkySpread = spreadChoose ($)
     restEvery m = every m (# silence)
+-- Chord degrees from the discussion here
+-- https://club.tidalcycles.org/t/hopefully-interesting-snippet-for-making-melodies/2012
+-- Thanks to work by artheist, BongLebowski, and earthlydelight on the tidal forums
+    chorddeg root voices degree = (# note ((voices + degree - 1) + root))

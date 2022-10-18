@@ -10,7 +10,7 @@
 	// currentEnvironment.put(\visAddr, "khoparzi-jnano.local");
 	(~setupPath++"/SCModules/OSCDefs.scd").load();
 	// (~setupPath++"VSTLoader.scd").load(); // Temporary VST loader
-	)
+	);
 
 // ~instruments.at(\fm8).editor
 // ~instruments.at(\massiveX).editor

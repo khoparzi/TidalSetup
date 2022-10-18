@@ -8,7 +8,7 @@ SynthDef(\click, { |out, sustain = 1, speed = 1, begin = 0, end = 1, pan, accele
 	OffsetOut.ar(out,
 		DirtPan.ar(sound, ~dirt.numChannels, pan)
 	)
-}).add
+}).add;
 
 SynthDef(\sinosc, {
   |out, sustain = 0.1, freq = 440, speed = 1, begin=0, end=0.1, pan=0.5, accelerate, offset|
@@ -29,5 +29,4 @@ SynthDef(\ikclick, { arg out = 0, gate = 1, centerFreq = 15000, rq = 0.9, mul = 
     sig = BPF.ar(noise, centerFreq.max(1), rq, mul).fold(-1, 1);
     Out.ar(out, Pan2.ar(sig, pan, amp.curvelin(0, 1, 0, 1, log(10))));
 }).add;
-
 );

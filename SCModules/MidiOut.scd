@@ -6,8 +6,8 @@
 	~dirt.soundLibrary.addMIDI(\iac, ~midiOut);
 	// ~midiOut = MIDIOut.newByName("Launchpad Pro 8", "MIDI Port");
 	// ~dirt.soundLibrary.addMIDI(\lppro, ~midiOut);
-	~midiOut = MIDIOut.newByName("Network", "Session 1");
-	~dirt.soundLibrary.addMIDI(\net, ~midiOut);
+	// ~midiOut = MIDIOut.newByName("Network", "Session 1");
+	// ~dirt.soundLibrary.addMIDI(\net, ~midiOut);
 	OSCdef.new(\iacLatency, {
 		arg msg;
 		"IAC Bus latency set to: ".post; msg[1].asString.post;

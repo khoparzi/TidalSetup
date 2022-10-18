@@ -8,4 +8,5 @@ s.waitForBoot {
 		{~dirt.start(57120, [0, 2, 4, 6, 0, 2, 4, 6, 0, 2, 4, 6]);},
 		{~dirt.start(57120, 0 ! 12);}
 	);
+	~dirt.soundLibrary.addSynth(\panic, (play: { ~dirt.orbits.do(_.freeSynths) }));
 })

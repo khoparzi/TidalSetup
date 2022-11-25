@@ -1,4 +1,9 @@
 (// With minimal samples, four orbits
+	// s.options.sampleRate = 44100;
+	s.options.numBuffers = 1024 * 256;
+	s.options.memSize = 8192 * 16;
+	s.options.maxNodes = 1024 * 32;
+	s.options.numInputBusChannels = 0;
 	s.options.numOutputBusChannels = 2;
 	s.latency = nil;
 	currentEnvironment.put(\setupPath, "/Users/khoparzi/Dev/TidalSetup/");

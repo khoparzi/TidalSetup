@@ -8,6 +8,7 @@
 	// ~dirt.soundLibrary.addMIDI(\lppro, ~midiOut);
 	// ~midiOut = MIDIOut.newByName("Network", "Session 1");
 	// ~dirt.soundLibrary.addMIDI(\net, ~midiOut);
+	~midiOut.latency = 0.01;
 	OSCdef.new(\iacLatency, {
 		arg msg;
 		"IAC Bus latency set to: ".post; msg[1].asString.post;

@@ -109,6 +109,9 @@
 			{msg[1].asString == "synths"} {
 				(~setupPath++"/SCModules/synthDef.scd").load();
 			}
+			{msg[1].asString == "misynths"} {
+				(~setupPath++"/SCModules/mi-synthdef.scd").load();
+			}
 			{msg[1].asString == "isynths"} {
 				(~setupPath++"/SCModules/IkedaSynths.scd").load();
 			}
@@ -122,7 +125,10 @@
 			{msg[1].asString == "rsynths"} {
 				currentEnvironment.put(\renickPath, ~setupPath++"/ExternalModules/tidal-playground/synths/");
 				(~setupPath++"/SCModules/RenickSynths.scd").load();
-			};
+			}
+			{msg[1].asString == "lsynths"} {
+				(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-superfm.scd").load();
+			}
 		}, '/loadBank', nil, 57120);
 		OSCdef.new(\loadFolders, {
 			arg msg;

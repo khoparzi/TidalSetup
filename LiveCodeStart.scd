@@ -20,8 +20,16 @@
 // ~instruments.at(\fm8).editor
 // ~instruments.at(\massiveX).editor
 
+// Test a tidal synth
+//(type:\dirt, dirt: ~dirt, s: \grrbass, n: -12, \release: 0.2).play;
+
 // (type:\dirt, dirt: ~dirt, s: \vst, n: 0, vstName: "fm8").play;
 
 // (type:\dirt, dirt: ~dirt, s: \grrbass, n: -12).play;
 // m = NetAddr("127.0.0.1", 57120); // loopback
 // m.sendMsg("/sampleInfo", "");
+
+// Show all synths
+// SynthDescLib.global.read;
+// 0.2.wait;
+// SynthDescLib.global.browse;

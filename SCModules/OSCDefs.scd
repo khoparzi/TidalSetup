@@ -2,9 +2,9 @@
 	OSCdef.new(\loadVis, {
 		arg msg;
 		msg[0].postln; msg[1].postln;
-		// (~setupPath++"/SCModules/VisualsForward.scd").load();
-		(~setupPath++"/SCModules/TidalVis.scd").load();
-		// ~visCAddr = NetAddr.new(~visAddr, 3335);
+		(~setupPath++"/SCModules/VisualsForward.scd").load();
+		// (~setupPath++"/SCModules/TidalVis.scd").load();
+		//~visCAddr = NetAddr.new(~visAddr, 3335);
 		}, '/loadVis', nil, 57120);
 
 	OSCdef.new(\exit, {

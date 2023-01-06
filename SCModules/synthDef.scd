@@ -293,8 +293,9 @@ SynthDef(\fander, { |out, amp=1, att=0, dec=0, sus=0.5,  rel=0, pan=0, accelerat
   var mod = SinOsc.ar(freq * modP * EnvGen.kr(Env.adsr(at, de,su,re,2,-4,0)), 0, freq * index * LFNoise1.kr(5.reciprocal).abs);
   var modu = SinOsc.ar(freq * moduP * EnvGen.kr(Env.adsr(at, de,su,re,2,-4,0)), 0, freq * index * LFNoise1.kr(5.reciprocal).abs);
   var car = SinOsc.ar(([freq, freq+detune] * carP) + [mod + modu], 0, mul);
-  OffsetOut.ar(out, Pan2.ar(car * env, pan, amp * 2));
+  OffsetOut.ar(out, DirtPan.ar(car * env * amp * 2, ~dirt.numChannels, pan));
 }).add;
+
 // A subbass Synth with a sine wave
 SynthDef(\subbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0 ratio = 3 pan = 0.0 phaserdepth = 0|
 	var osc1, osc2, filter, env, filterenv;
@@ -307,8 +308,9 @@ SynthDef(\subbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0 
 
 	env = EnvGen.ar(Env.adsr(0.01, 0.0, 0.9, 0.05), gate, doneAction:2);
 
-	Out.ar(out, Pan2.ar(filter * env * amp * 2, pan));
+	Out.ar(out, DirtPan.ar(filter * env * amp * 2, ~dirt.numChannels, pan));
 	}).add;
+
 // A phase modulated bass Synth
 SynthDef(\pmbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0.5 ratio = 3 pan = 0.0 phaserdepth = 0|
 	var osc, filter, env, filterenv;
@@ -320,7 +322,7 @@ SynthDef(\pmbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0.5
 
 	env = EnvGen.ar(Env.adsr(0.0, 0.0, 0.9, 0.05), gate, doneAction:2);
 
-	Out.ar(out, Pan2.ar(filter * env * amp * 2, pan));
+	Out.ar(out, DirtPan.ar(filter * env * amp * 2, ~dirt.numChannels, pan));
 	}).add;
 );
 
@@ -336,30 +338,26 @@ SynthDef(\subbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0 
 
 	env = EnvGen.ar(Env.adsr(0.01, 0.0, 0.9, 0.05), gate, doneAction:2);
 
-	Out.ar(out, Pan2.ar(filter * env * amp * 2, pan));
+	Out.ar(out, DirtPan.ar(filter * env * amp * 2, ~dirt.numChannels, pan));
 	}).add;
 );
 
-(type:\dirt, dirt: ~dirt, s: \grrbass, n: -12, \release: 0.2).play;
-
-// (
-// SynthDef(\grrbass, {|out = 0 amp = 0.1 gate = 1 pan = 0.0|
-// 	var snd, auto, freq, trig, env;
-// 	freq = \freq.kr(40);
-// 	trig = ToggleFF.ar(Dust.ar(8));
-// 	auto = trig.lagud(0.1, 0.3);
-// 	snd = Saw.ar(freq);
-// 	snd = Splay.ar(snd);
-// 	snd = (snd * 3).fold2;
-// 	snd = RLPF.ar(snd, freq * 10, 0.1);
-// 	snd = (snd * 5).fold2;
-// 	snd = RLPF.ar(snd, freq * 8 * TRand.ar(1, 4, trig), 0.5);
-// 	snd = (snd * 5).fold2;
-// 	snd = MoogFF.ar(snd, auto.linexp(0, 1, 100, 8000), 0);
-// 	snd = snd + DelayC.ar(snd, 0.01, SinOsc.ar(0.5, [0, pi]).range(0, 0.001));
-// 	snd = (snd * 3.dbamp).tanh;
-//     env = EnvGen.ar(Env.adsr(0.1, 0.9, 0.9, 0.7), gate, doneAction:2);
-// 	// Out.ar(out, Pan2.ar(amp, pan));
-//     Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, 0.5));
-// }).add;
-// );
+(
+SynthDef(\grrbass, {|out = 0 amp = 0.1 gate = 1 pan = 0.0|
+	var snd, auto, freq, trig, env;
+	freq = \freq.kr(40);
+	trig = ToggleFF.ar(Dust.ar(8));
+	auto = trig.lagud(0.1, 0.3);
+	snd = Saw.ar(freq);
+	snd = Splay.ar(snd);
+	snd = (snd * 3).fold2;
+	snd = RLPF.ar(snd, freq * 10, 0.1);
+	snd = (snd * 5).fold2;
+	snd = RLPF.ar(snd, freq * 8 * TRand.ar(1, 4, trig), 0.5);
+	snd = (snd * 5).fold2;
+	snd = MoogFF.ar(snd, auto.linexp(0, 1, 100, 8000), 0);
+	snd = snd + DelayC.ar(snd, 0.01, SinOsc.ar(0.5, [0, pi]).range(0, 0.001));
+	snd = (snd * 3.dbamp).tanh;
+    env = EnvGen.ar(Env.adsr(0.1, 0.9, 0.9, 0.7), gate, doneAction:2);
+    Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan));
+}).add;);

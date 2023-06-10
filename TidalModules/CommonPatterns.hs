@@ -51,3 +51,4 @@ let footwork1 = struct "t(3,8,2)"
     lowsweep' s = slow s $ (range 50 500 (sine))
     chancervb p = (# room (scramble 8 "0!7 0.9")) . (# size (wchoose[(1,0.1), (0.5, 0.25), (0, 0.5)])) $ p
     mascan = ((>| n ("0 1 2 3 4 5 6 7" + "<0 8>")) . (# legato 1))
+    testPattern = s "numbers" >| n (r 2) # pan (r 2)

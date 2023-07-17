@@ -1,7 +1,7 @@
 (// With minimal samples, four orbits
     s.options.sampleRate = 48000;
 	s.options.numBuffers = 1024 * 256;
-	s.options.memSize = 8192 * 16;
+	s.options.memSize = 8192 * 24;
 	s.options.maxNodes = 1024 * 32;
 	s.options.numInputBusChannels = 0;
 	s.options.numOutputBusChannels = 2;

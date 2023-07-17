@@ -44,6 +44,10 @@
 				"\n\nFiles in superdirt folder".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/superdirt/*");
 			}
+			{msg[1].asString == "cyberbass"} {
+				"\n\nFiles in cyberbass folder".postln;
+				~dirt.loadSoundFiles(~samplesPath++"/cyberbass/*");
+			}
 			{msg[1].asString == "oneshots"} {
 				~dirt.loadSoundFileFolder(~samplesPath++"/superdirt/oneshots", \oneshots);
 			}

@@ -133,6 +133,11 @@
 			{msg[1].asString == "lsynths"} {
 				(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-superfm.scd").load();
 			}
+			{msg[1].asString == "drum-machines"} {
+	    // add this to your superdirt startup
+				~drumMachinesDir = Quarks.all.detect({ |x| x.name == "tidal-drum-machines" }).localPath;
+				~dirt.loadSoundFiles(~drumMachinesDir +/+ "machines" +/+ "*" +/+ "*", namingFunction: { |x| x.basename.replace("-","")});
+			}
 		}, '/loadBank', nil, 57120);
 		OSCdef.new(\loadFolders, {
 			arg msg;

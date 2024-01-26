@@ -38,4 +38,12 @@ let deepbass = s "beben" # n 1
     breaksp16 p = splice 16 p $ s "breaks"
     breaksp32 p = splice 32 p $ s "breaks"
     jukeclap = s "jukeit" # n 3
+    
+    drumMachine name ps = stack 
+                    (map (\ x -> 
+                        (# s (name ++| (extractS "s" (x)))) $ x
+                        ) ps)
+    drumFrom name drum = s (name ++| drum)
+    drumM = drumMachine
+    drumF = drumFrom
 :}

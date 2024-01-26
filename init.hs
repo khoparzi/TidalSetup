@@ -17,7 +17,7 @@ import Control.Applicative
 
 -- :script /Users/khoparzi/Dev/TidalSetup/TidalModules/VisualParams.hs
 
--- :script /Users/khoparzi/Dev/TidalSetup/TidalModules/SampleAliases.hs
+:script /Users/khoparzi/Dev/TidalSetup/TidalModules/SampleAliases.hs
 
 -- :script /Users/khoparzi/Dev/TidalSetup/TidalModules/SampleMaps.hs
 
@@ -37,6 +37,6 @@ import Control.Applicative
 
 :script /Users/khoparzi/Dev/TidalSetup/TidalModules/SuperFM.hs
 
--- :script /Volumes/QuadData/Dev/TidalSetup/TidalModules/Redirt.hs
+-- :script /Users/khoparzi/Dev/TidalSetup/TidalModules/Redirt.hs
 
 :set prompt "GoBombastic!>"

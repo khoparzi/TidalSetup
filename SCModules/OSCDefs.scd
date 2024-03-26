@@ -104,6 +104,12 @@
 			{msg[1].asString == "midiout"} {
 				(~setupPath++"/SCModules/MidiOut.scd").load();
 			}
+			{msg[1].asString == "midilxr"} {
+				(~setupPath++"/SCModules/LXR-02Midi.scd").load();
+			}
+			{msg[1].asString == "midilaunchpad"} {
+				(~setupPath++"/SCModules/LaunchpadOut.scd").load();
+			}
 			{msg[1].asString == "linuxmidi"} {
 				MIDIClient.init;
 				MIDIClient.list;

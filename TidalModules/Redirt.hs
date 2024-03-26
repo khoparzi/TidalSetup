@@ -80,7 +80,7 @@ let renoise = Target {
     renoisemap = [(renoise, formats)]
 :}
 
-tidal <- startStream defaultConfig renoisemap
+tidal <- startStream defaultConfig [superdirtOscMap, renoisemap]
 
 :{
 let rt = streamReplace tidal

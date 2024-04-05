@@ -326,22 +326,6 @@ SynthDef(\pmbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0.5
 	}).add;
 );
 
-(// A subbass Synth with a sine wave
-SynthDef(\subbass, {|out = 0 freq = 440 amp = 0.1 gate = 1 cutoff = 1000 rq = 0 ratio = 3 pan = 0.0 phaserdepth = 0|
-	var osc1, osc2, filter, env, filterenv;
-
-	osc1 = SinOsc.ar(freq);
-	osc2 = SinOsc.ar(freq * ratio, phaserdepth);
-
-	filterenv = EnvGen.ar(Env.adsr(0.0, 0.5, 0.2, 0.2), gate, doneAction: 2);
-	filter = RLPF.ar((osc1 * 0.75) + (osc2 * 0.12), cutoff * filterenv + 100, rq);
-
-	env = EnvGen.ar(Env.adsr(0.01, 0.0, 0.9, 0.05), gate, doneAction:2);
-
-	Out.ar(out, DirtPan.ar(filter * env * amp * 2, ~dirt.numChannels, pan));
-	}).add;
-);
-
 (
 SynthDef(\grrbass, {|out = 0 amp = 0.1 gate = 1 pan = 0.0|
 	var snd, auto, freq, trig, env;

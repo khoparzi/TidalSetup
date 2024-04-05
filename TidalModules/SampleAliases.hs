@@ -1,14 +1,5 @@
 :{
-let deepbass = s "beben" # n 1
-    orgbass = s "beben" # n 5
-    orgbass2 = s "beben" # n 15
-    smthbass = s "beben" # n 6
-    pluckbass = s "beben" # n 12
-    jazzbass = s "abst" # n 1
-    wubbass = s "backwhen" # n 0
-    dubbass = s "dubr" # n 0
-    grrbass = s "dubr" # n 13
-    hat808 = s "808:1"
+let hat808 = s "808:1"
     bd808 = s "808bd"
     bd808' a = s "808bd" # n a
     -- Breaks
@@ -18,7 +9,7 @@ let deepbass = s "beben" # n 1
     breaks32 p = slice 32 p $ s "breaks"
     breaksp16 p = splice 16 p $ s "breaks"
     breaksp32 p = splice 32 p $ s "breaks"
-    jukeclap = s "jukeit" # n 3
+    jukeclap = s "indigoclap" # n 3
     gretsch = inhabit [
             ("bd", n "13" # s "gretsch")
             , ("sd", n "20" # s "gretsch")
@@ -36,6 +27,23 @@ let deepbass = s "beben" # n 1
             , ("bass", n "44" # s "pads")
             , ("dnb", n "46" # s "pads")
             , ("sparkle", n "52" # s "pads")
+            ]
+    basses = inhabit [
+            ("deep", n "3" # s "beben")
+            , ("organ", n "5" # s "beben")
+            , ("smooth", n "6" # s "beben")
+            , ("pluck", n "12" # s "beben")
+            , ("organ2", n "15" # s "beben")
+            , ("dub", n "0" # s "dubr")
+            , ("grr", n "13" # s "dubr")
+            ]
+    dhol = inhabit [
+            ("dhi", n 5 # s "dhol")
+            , ("ti", n 6 # s "dhol")
+            , ("ta", n 7 # s "dhol")
+            , ("dha", n 2 # s "dhol")
+            , ("tik", n 3 # s "dhol")
+            , ("tak", n 4 # s "dhol")
             ]
     
     drumMachine name ps = stack 

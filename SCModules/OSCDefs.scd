@@ -91,6 +91,10 @@
 				"\n\nSamples for cringing it out".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/cringe/*");
 			}
+			{msg[1].asString == "rave"} {
+				"\n\nSome ravin' synths".postln;
+				(~setupPath++"/SCModules/RAVE.scd").load();
+			}
 			{msg[1].asString == "ignoto"} {
 				"\n\n\nSamples for ignoto".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/ignoto/*");

@@ -29,30 +29,30 @@
 				"\n\nExtra superdirt".postln; ~dirt.loadSoundFiles(~samplesPath++"/extra-superdirt-samples/*");
 			}
 			{msg[1].asString == "khoparzi"} {
-				"\n\nFiles in superdirt folder".postln;
+				"\n\nMy custom samples folder".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/smalldirt/*");
 			}
 			{msg[1].asString == "smalldirt"} {
-				"\n\nFiles in superdirt folder".postln;
+				"\n\nMy custom samples folder".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/smalldirt/*");
 			}
 			{msg[1].asString == "batteryBass"} {
-				"\n\nFiles in superdirt folder".postln;
+				"\n\nSamples from battery folder".postln;
 				~dirt.loadSoundFiles(~batteryPath++"One Shots/Synth Note/*");
 			}
 			{msg[1].asString == "superdirt"} {
-				"\n\nFiles in superdirt folder".postln;
+				"\n\nSamples in superdirt folder".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/superdirt/*");
 			}
 			{msg[1].asString == "cyberbass"} {
-				"\n\nFiles in cyberbass folder".postln;
+				"\n\nSamples in cyberbass folder".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/cyberbass/*");
 			}
 			{msg[1].asString == "oneshots"} {
 				~dirt.loadSoundFileFolder(~samplesPath++"/superdirt/oneshots", \oneshots);
 			}
 			{msg[1].asString == "loops"} {
-				"\n\nFiles in loops folder".postln;
+				"\n\nSamples in loops folder".postln;
 				(~setupPath++"/SCModules/Loops.scd").load();
 			}
 			{msg[1].asString == "rach"} {
@@ -84,15 +84,19 @@
 				~dirt.freeSoundFiles([\abst, \buzzcut, \waxdoc, \allme, \aye, \backwhen, \battleg, \beatboard, \beben, \calizone, \charge, \conant, \dubr, \ghettot, \imperial, \jukeit, \realblue])
 			}
 			{msg[1].asString == "collab"} {
-				"\n\nFiles for collabs".postln;
+				"\n\nSamples from collabs".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/collab/*");
 			}
+			{msg[1].asString == "cringe"} {
+				"\n\nSamples for cringing it out".postln;
+				~dirt.loadSoundFiles(~samplesPath++"/cringe/*");
+			}
 			{msg[1].asString == "ignoto"} {
-				"\n\nFiles for ignoto".postln;
+				"\n\n\nSamples for ignoto".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/ignoto/*");
 			}
 			{msg[1].asString == "supercontinent"} {
-				"\n\nFiles for SuperContinent".postln;
+				"\n\nSamples for SuperContinent".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/supercontinent/*");
 			}
 			{msg[1].asString == "midiin"} {

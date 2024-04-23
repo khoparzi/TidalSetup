@@ -9,3 +9,8 @@ let f = pF "f"
     mul = pF "mul"
     rq = pF "rq"
     scw a p = ((# s "scw-one") . (# loop a)) $ p
+-- For shepard synth
+    freqModAmount = pF "freqModAmount"
+    tFreq = pF "tFreq"
+    overlap = pF "overlap"
+    numOsc = pF "numOsc"

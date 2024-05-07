@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# run the next line setup symlink in /usr/local/bin/
+# 'sudo ln -s /Users/khoparzi/Dev/TidalSetup/bin/superdirtvim /usr/local/bin/superdirtvim'
+set -euf -o pipefail
+
+VIM=${VIM:-"vim"}
+TMUX=${TMUX:-"tmux"}
+SESSION=${SESSION:-"sc"}
+
+$TMUX -2 attach-session -t $SESSION || $TMUX -2 \
+  new-session -s $SESSION   \; \
+  send-keys -t 0 "cd ~/Dev/TidalSetup" C-m   \; \
+  send-keys -t 0 "vim ~/Dev/TidalSetup/LiveCodeStart.scd" C-m   \; \
+  select-pane -t 0

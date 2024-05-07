@@ -345,3 +345,133 @@ SynthDef(\grrbass, {|out = 0 amp = 0.1 gate = 1 pan = 0.0|
     env = EnvGen.ar(Env.adsr(0.1, 0.9, 0.9, 0.7), gate, doneAction:2);
     Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan));
 }).add;);
+
+// Based on dietcv's example on scsynth.org
+// https://scsynth.org/t/how-can-i-make-the-junkers-ju-87-jericho-trumpet-sound-using-a-glissando/9238/4
+// Requires new parameters to be added in tidal
+//  let freqModAmount = pF "freqModAmount"
+//      tFreq = pF "tFreq"
+//      overlap = pF "overlap"
+//      numOsc = pF "numOsc"
+(
+SynthDef(\shepard, {
+	var attack = 0.0016, release = 0.25, sustain = 1, tFreq, windowRates, windowPhases, freqWindows, grainWindows, freq = 220, sig, numOsc = 10;
+
+	var multiChannelPhase = { |numOsc, rate|
+	var localRate = rate / numOsc;
+	numOsc.collect{ |i|
+			var localPhase, localTrig, hasTriggered;
+			localPhase = Phasor.ar(DC.ar(0), localRate * SampleDur.ir);
+			localPhase = (localPhase + (1 - (i / numOsc)) - SampleDur.ir).wrap(0, 1);
+			localTrig = HPZ1.ar(localPhase) < 0;
+			hasTriggered = PulseCount.ar(localTrig) >= 1;
+			//localPhase * hasTriggered;
+			localPhase;
+		};
+	};
+
+	tFreq = \tFreq.kr(10);
+	windowRates = tFreq / \overlap.kr(1);
+	windowPhases = multiChannelPhase.(numOsc, windowRates);
+
+	freqWindows = IEnvGen.ar(Env([0, 1], [1.0], \lin), windowPhases);
+	grainWindows = IEnvGen.ar(Env([0, 1, 0], [0.5, 0.5], \sin), windowPhases);
+
+	freq = \freq.kr(440) * (2 ** (freqWindows * \freqModAmount.kr(4)));
+
+	sig = SinOsc.ar(freq);
+
+	sig = sig * grainWindows;
+
+	sig = Splay.ar(sig);
+
+	sig = sig * \amp.kr(-20.dbamp);
+
+	sig = sig * Env.asr(0.001, 1, 0.001).ar(Done.freeSelf, \gate.kr(1));
+
+	Out.ar(\out.kr(0), sig);
+}).add;);
+
+// With Additive synthesis
+(
+SynthDef(\additivegliss, {
+
+	var	numChannels = 5;
+	var numPartials = 16;
+
+	var tFreq, trig, triggers, overlap, windowRate, windowPhases;
+	var grainWindows, freqWindows, freqs, sigs, sig;
+
+	var multiChannelTrigger = { |numChannels, trig|
+		var rate = if(trig.rate == \audio, \ar, \kr);
+		numChannels.collect{ |chan|
+			PulseDivider.perform(rate, trig, numChannels, chan);
+		};
+	};
+
+	var multiChannelPhase = { |triggers, windowRate|
+		var rate = if(triggers.rate == \audio, \ar, \kr);
+		triggers.collect{ |localTrig, i|
+			var hasTriggered = PulseCount.perform(rate, localTrig) > 0;
+			Sweep.perform(rate, localTrig, windowRate * hasTriggered);
+		};
+	};
+
+	var makeStretchedHarmonicSeries = { |numPartials, freq, inharmonicity|
+		var ratios = (1..numPartials);
+		var chain = (
+			numPartials: numPartials,
+			ratios: ratios,
+			amps: 1 ! numPartials,
+		);
+		chain[\freqs] = freq * ratios * (1 + (inharmonicity * ratios * ratios)).sqrt;
+		chain;
+	};
+
+	var addSpectralTilt = { |chain, tiltPerOctave|
+		chain[\amps] = chain[\amps] * (chain[\ratios].log2 * tiltPerOctave).dbamp;
+		chain;
+	};
+
+	tFreq = \tFreq.kr(0.1);
+	trig = Impulse.kr(tFreq);
+
+	triggers = multiChannelTrigger.(numChannels, trig);
+
+	overlap = \overlap.kr(1);
+	windowRate = tFreq / overlap;
+
+	windowPhases = multiChannelPhase.(triggers, windowRate);
+
+	grainWindows = IEnvGen.ar(Env([0, 1, 0], [0.5, 0.5], \sin), windowPhases);
+
+	freqWindows = IEnvGen.kr(Env([0, 1], [1], \lin), windowPhases);
+	freqs = \freq.kr(110) * (2 ** (freqWindows * \freqModAmount.kr(4)));
+
+	sigs = freqs.collect { |freq, i|
+		var chain, sig;
+
+		chain = makeStretchedHarmonicSeries.(numPartials, freq, \inharmonicity.kr(0.01));
+		chain = addSpectralTilt.(chain, \tiltPerOctaveDb.kr(-3));
+
+		sig = SinOsc.ar(
+			freq: chain[\freqs],
+			phase: { Rand(0, 2pi) } ! chain[\numPartials],
+			mul: chain[\amps]
+		);
+
+		sig = sig[0,2..].sum + ([-1,1] * sig[1,3..].sum);
+
+		sig * grainWindows[i];
+
+	};
+
+	sig = sigs.sum;
+
+	sig = sig * \amp.kr(-25.dbamp);
+
+	sig = sig * Env.asr(0.001, 1, 0.001).ar(Done.freeSelf, \gate.kr(1));
+
+	Out.ar(\out.kr(0), sig);
+}).add;
+);

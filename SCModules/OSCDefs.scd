@@ -239,4 +239,15 @@
 				)
 			}.defer;
 			}, '/setsidechain', nil, 57120);
+			
+
+		OSCdef.new(\cdskip, {
+		"CDSkip enabled".postln;
+		// add cdskip effect to the orbits
+		~dirt.orbits.do { |x|
+			var cdskip = GlobalDirtEffect(\dirt_global_cdskip, [\cdpos, \cdresetfreq, \cdskipfreq, \cdreset, \cdskip]);
+			x.globalEffects = x.globalEffects.addFirst(cdskip);
+			x.initNodeTree;
+		};
+			}, '/cdskip', nil, 57120);
 	)

@@ -8,7 +8,6 @@
 
             var signal = CDSkip.ar(
                 sig ! 2,
-                autoMode: 1,
                 pos: SinOsc.ar(cdpos),
                 skipTrigger: Impulse.ar(cdskipFreq, mul: cdskip),
                 resetTrigger: Impulse.ar(cdresetFreq, mul: cdreset),

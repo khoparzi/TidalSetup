@@ -197,17 +197,6 @@
 			arg msg;
 			~dirt.postSampleInfo;
 			}, '/sampleInfo', nil, 57120);
-		OSCdef.new(\showlevels, {
-			arg msg;
-			var w, spec;
-			spec = \db.asSpec;
-			w = Window("orbital volume", Rect(240, 240, 300, 500)).front;
-			w.view.layout = HLayout(*~dirt.orbits.collect { |x|
-				var val = spec.unmap(x.get(\amp).ampdb);
-				Slider().value_(val).action_({ |v| x.set(\amp, spec.map(v.value).dbamp.postln) })
-			});
-			"\n\nShow levels now".postln;
-			}, '/showlevels', nil, 57120);
 		OSCdef.new(\nosidechain, {
 			arg msg;
 			~dirt.orbits[0].outBus = 0;

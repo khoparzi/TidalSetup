@@ -239,7 +239,18 @@
 				)
 			}.defer;
 			}, '/setsidechain', nil, 57120);
-			
+        OSCdef.new(\d1skip, {
+            ~bus = Bus.audio(s, numChannels: 2);
+            ~dirt.orbits[0].outBus = ~bus;
+            (
+                Ndef(\d1skip, {
+                    var control = InBus.ar(~dirt.orbits[1].dryBus, 2).sum;
+                    var dirt = InBus.ar(~bus, 2);
+                    CDSkip.ar(dirt, skipTrigger: control)
+                }).play;
+                "\n\nd1 is now skipped by d2".postln;
+            )
+        }, '/d1skip', nil, 57120);
 
 		OSCdef.new(\cdskip, {
 		"CDSkip enabled".postln;

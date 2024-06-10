@@ -1,10 +1,3 @@
-// To test the vstSynths
-// ~instruments.at(\maschine).editor;
-// (type:\dirt, dirt: ~dirt, s: \vst, n: -12, vstName: \maschine).play;
-
-// m = NetAddr("127.0.0.1", 57120); // loopback
-// m.sendMsg("/addVST", "fm8");
-
 (
 	~instrumentList = Dictionary [
 		\fm8 -> "FM8",
@@ -61,18 +54,4 @@
 		var newSaveName = ~setupPath +/+ "presets/" ++ saveName[0] ++ "-" ++ saveName[1] ++ ".vstpreset";
 		~vstInstruments.at(saveName[0].asSymbol).readProgram(newSaveName); // For writing preset
 	}, '/vstRead', nil, 57120);
-	// {
-	// 		0.2.wait;
-	// 		~vstInstruments.add(\fm8 -> VSTPluginController(Synth(\vsti)).open( "FM8", editor: true ));
-	// 		s.sync;
-	// 		0.2.wait;
-	// 		~dirt.soundLibrary.addMIDI(\fm8, ~vstInstruments.at(\fm8).midi);
-	// 		2.wait;
-	// 	}.fork;
 	)
-
-~vstInstruments.at(\kontakt).info.printPresets;
-~vstInstruments.at(\kontakt).gui;
-
-VSTPlugin.search(s);
-(VSTPlugin.plugins(s)['iZotope BreakTweaker'].print;)

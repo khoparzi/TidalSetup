@@ -2,9 +2,9 @@
 	OSCdef.new(\loadVis, {
 		arg msg;
 		msg[0].postln; msg[1].postln;
-		// (~setupPath++"/SCModules/VisualsForward.scd").load();
-		(~setupPath++"/SCModules/TidalVis.scd").load();
-		// ~visCAddr = NetAddr.new(~visAddr, 3335);
+		(~setupPath++"/SCModules/VisualsForward.scd").load();
+		// (~setupPath++"/SCModules/TidalVis.scd").load();
+		//~visCAddr = NetAddr.new(~visAddr, 3335);
 		}, '/loadVis', nil, 57120);
 
 	OSCdef.new(\exit, {
@@ -29,26 +29,30 @@
 				"\n\nExtra superdirt".postln; ~dirt.loadSoundFiles(~samplesPath++"/extra-superdirt-samples/*");
 			}
 			{msg[1].asString == "khoparzi"} {
-				"\n\nFiles in superdirt folder".postln;
+				"\n\nMy custom samples folder".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/smalldirt/*");
 			}
 			{msg[1].asString == "smalldirt"} {
-				"\n\nFiles in superdirt folder".postln;
+				"\n\nMy custom samples folder".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/smalldirt/*");
 			}
 			{msg[1].asString == "batteryBass"} {
-				"\n\nFiles in superdirt folder".postln;
+				"\n\nSamples from battery folder".postln;
 				~dirt.loadSoundFiles(~batteryPath++"One Shots/Synth Note/*");
 			}
 			{msg[1].asString == "superdirt"} {
-				"\n\nFiles in superdirt folder".postln;
+				"\n\nSamples in superdirt folder".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/superdirt/*");
+			}
+			{msg[1].asString == "cyberbass"} {
+				"\n\nSamples in cyberbass folder".postln;
+				~dirt.loadSoundFiles(~samplesPath++"/cyberbass/*");
 			}
 			{msg[1].asString == "oneshots"} {
 				~dirt.loadSoundFileFolder(~samplesPath++"/superdirt/oneshots", \oneshots);
 			}
 			{msg[1].asString == "loops"} {
-				"\n\nFiles in loops folder".postln;
+				"\n\nSamples in loops folder".postln;
 				(~setupPath++"/SCModules/Loops.scd").load();
 			}
 			{msg[1].asString == "rach"} {
@@ -80,15 +84,19 @@
 				~dirt.freeSoundFiles([\abst, \buzzcut, \waxdoc, \allme, \aye, \backwhen, \battleg, \beatboard, \beben, \calizone, \charge, \conant, \dubr, \ghettot, \imperial, \jukeit, \realblue])
 			}
 			{msg[1].asString == "collab"} {
-				"\n\nFiles for collabs".postln;
+				"\n\nSamples from collabs".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/collab/*");
 			}
+			{msg[1].asString == "cringe"} {
+				"\n\nSamples for cringing it out".postln;
+				~dirt.loadSoundFiles(~samplesPath++"/cringe/*");
+			}
 			{msg[1].asString == "ignoto"} {
-				"\n\nFiles for ignoto".postln;
+				"\n\n\nSamples for ignoto".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/ignoto/*");
 			}
 			{msg[1].asString == "supercontinent"} {
-				"\n\nFiles for SuperContinent".postln;
+				"\n\nSamples for SuperContinent".postln;
 				~dirt.loadSoundFiles(~samplesPath++"/supercontinent/*");
 			}
 			{msg[1].asString == "midiin"} {
@@ -100,6 +108,12 @@
 			{msg[1].asString == "midiout"} {
 				(~setupPath++"/SCModules/MidiOut.scd").load();
 			}
+			{msg[1].asString == "midilxr"} {
+				(~setupPath++"/SCModules/LXR-02Midi.scd").load();
+			}
+			{msg[1].asString == "midilaunchpad"} {
+				(~setupPath++"/SCModules/LaunchpadOut.scd").load();
+			}
 			{msg[1].asString == "linuxmidi"} {
 				MIDIClient.init;
 				MIDIClient.list;
@@ -108,6 +122,9 @@
 			}
 			{msg[1].asString == "synths"} {
 				(~setupPath++"/SCModules/synthDef.scd").load();
+			}
+			{msg[1].asString == "misynths"} {
+				(~setupPath++"/SCModules/mi-synthdef.scd").load();
 			}
 			{msg[1].asString == "isynths"} {
 				(~setupPath++"/SCModules/IkedaSynths.scd").load();
@@ -122,7 +139,15 @@
 			{msg[1].asString == "rsynths"} {
 				currentEnvironment.put(\renickPath, ~setupPath++"/ExternalModules/tidal-playground/synths/");
 				(~setupPath++"/SCModules/RenickSynths.scd").load();
-			};
+			}
+			{msg[1].asString == "lsynths"} {
+				(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-superfm.scd").load();
+			}
+			{msg[1].asString == "drum-machines"} {
+	    // add this to your superdirt startup
+				~drumMachinesDir = Quarks.all.detect({ |x| x.name == "tidal-drum-machines" }).localPath;
+				~dirt.loadSoundFiles(~drumMachinesDir +/+ "machines" +/+ "*" +/+ "*", namingFunction: { |x| x.basename.replace("-","")});
+			}
 		}, '/loadBank', nil, 57120);
 		OSCdef.new(\loadFolders, {
 			arg msg;
@@ -144,8 +169,15 @@
 			}, '/freeBank', nil, 57120);
 		OSCdef.new(\startrms, {
 			arg msg;
-			// For feedforward
-			~dirt.startSendRMS;
+            // Run this to start sending the RMS OSC messages to SC.
+            ~dirt.startSendRMS;
+            // The bridge will be listening to OSC messages on port UDP 9130.
+            b = NetAddr.new("127.0.0.1", 9130);
+            // This is the RMS OSC handler, here we'll forward these messages to our bridge
+            OSCFunc({ |msg|
+            // Forward OSC message
+                b.sendMsg("/rms", *msg);
+         	}, "/rms");
 			}, '/startrms', nil, 57120);
 		OSCdef.new(\openscope, {
 			arg msg;
@@ -165,17 +197,6 @@
 			arg msg;
 			~dirt.postSampleInfo;
 			}, '/sampleInfo', nil, 57120);
-		OSCdef.new(\showlevels, {
-			arg msg;
-			var w, spec;
-			spec = \db.asSpec;
-			w = Window("orbital volume", Rect(240, 240, 300, 500)).front;
-			w.view.layout = HLayout(*~dirt.orbits.collect { |x|
-				var val = spec.unmap(x.get(\amp).ampdb);
-				Slider().value_(val).action_({ |v| x.set(\amp, spec.map(v.value).dbamp.postln) })
-			});
-			"\n\nShow levels now".postln;
-			}, '/showlevels', nil, 57120);
 		OSCdef.new(\nosidechain, {
 			arg msg;
 			~dirt.orbits[0].outBus = 0;

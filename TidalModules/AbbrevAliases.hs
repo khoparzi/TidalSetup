@@ -1,6 +1,9 @@
 -- Aliases
 let inter = interlace
     bpm(a) = setcps(a/120/2)
+    bpm2(a) = setcps(a/60/2)
+    bpm4(a) = setcps(a/60/4)
+    bpm8(a) = setcps(a/60/8)
     bpmm b = cps (b/120/2)
     st = stack
     ct = cat
@@ -104,11 +107,7 @@ let inter = interlace
     slow3 p = slow 3 $ p
     slow4 p = slow 4 $ p
     orb = orbit
-    mc = midichan
-    midicc num val = (# ccn num) . (# ccv val)
     sg = segment
-    cceuc8 c p = euclid (floor <$> (segment 1 $ range 1 8 $ cF 0 c)) 8 $ p
-    cceuc16 c p = euclid (floor <$> (segment 1 $ range 1 16 $ cF 0 c)) 16 $ p
     qdelayt a = delayt ((1/4) * a)
     edelayt a = delayt ((1/8) * a)
     sdelayt a = delayt ((1/16) * a)

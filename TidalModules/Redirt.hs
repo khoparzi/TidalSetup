@@ -77,10 +77,12 @@ let renoise = Target {
     val = value
     -- redefining octave. use it with operator |+ instead of #
     octave = \p -> note (p |* 12)
-    oscmap = [(renoise, formats)]
+    renoisemap = [(renoise, formats)]
 :}
 
-:{  
+tidal <- startStream defaultConfig [superdirtOscMap, renoisemap]
+
+:{
 let rt = streamReplace tidal
     t1 = rt 1 . (|< track 1)
     t2 = rt 2 . (|< track 2)

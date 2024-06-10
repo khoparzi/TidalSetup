@@ -1,6 +1,7 @@
 -- From jArm https://gist.github.com/jarmitage/627a7d5a9263475ba53f725f1405d6a2
 -- sequence generators
 let r = run
+    shiftrun runLength shift = ((run runLength) |+ shift)
     ri a = rev (r a) -- run inverted
     -- rd a = (0 - (r a)) -- run down e.g. (10 - (r 10))
     c = choose

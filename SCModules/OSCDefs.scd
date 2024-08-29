@@ -134,7 +134,7 @@
 			}
 			{msg[1].asString == "dsynths"} {
 				"\n\nDiego's synths".postln;
-				~setupPath++"/ExternalModules/diegodorado-tidal-synths/loadAll.scd".load();
+				(~setupPath++"/ExternalModules/diegodorado-tidal-synths/loadAll.scd").load();
 			}
 			{msg[1].asString == "rsynths"} {
 				currentEnvironment.put(\renickPath, ~setupPath++"/ExternalModules/tidal-playground/synths/");

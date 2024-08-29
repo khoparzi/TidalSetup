@@ -227,6 +227,8 @@ SynthDef("warps" ++ ~dirt.numChannels, { |out, warpsalgo=0, warpstimb=0, warpsos
     ReplaceOut.ar(out, signal)
 }).add;
 
+"Mutable synths Loaded".postln;
+
 (1..SuperDirt.maxSampleNumChannels).do { |numChannels|
 
     SynthDef("global_mi_verb" ++ numChannels, { |dryBus, effectBus, verbwet=0, verbtime=0, verbdamp=0, verbhp=0, verbfreeze=0, verbdiff=0.625, verbgain=0|
@@ -275,4 +277,5 @@ SynthDef("warps" ++ ~dirt.numChannels, { |out, warpsalgo=0, warpstimb=0, warpsos
     x.initNodeTree;
 };
 // end define global effects for mutable instruments effects
+"Mutable Effects clouds and verb Loaded".postln;
 }.fork);

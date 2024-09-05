@@ -199,19 +199,19 @@
 			}, '/sampleInfo', nil, 57120);
 		OSCdef.new(\nosidechain, {
 			arg msg;
-			~dirt.orbits[0].outBus = 0;
+			~d1.outBus = 0;
 			~bus.free;
 			"\n\nNo Sidechain now".postln;
 			}, '/noside', nil, 57120);
 		OSCdef.new(\sidechained, {
 			arg msg;
 			// Sidechain d1 with d2
-			~bus = Bus.audio(s, numChannels:2);
-			~dirt.orbits[0].outBus = ~bus;
+			~sidechainBus = Bus.audio(s, numChannels:2);
+			~d1.outBus = ~sidechainBus;
 			(
 				Ndef(\d1side, {
-					var control = InBus.ar(~dirt.orbits[1].dryBus, 2).sum;
-					var dirt = InBus.ar(~bus, 2);
+					var control = InBus.ar(~d2.dryBus, 2).sum;
+					var dirt = InBus.ar(~sidechainBus, 2);
 					Compander.ar(dirt, control, thresh: 0.001, slopeBelow: 1.0,
 						slopeAbove: 0.651, clampTime: 0.05, relaxTime: 0.1)
 					}).play;

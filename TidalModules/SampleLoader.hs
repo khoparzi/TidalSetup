@@ -19,3 +19,4 @@ let tosc m = sendOsc m ""
     record = sendOsc "/record" ""
     stoprecord = sendOsc "/stoprecord" ""
     iacLatency l = sendOsc "/iacLatency" l
+    sidechain = sendOsc "/sidechained" ""

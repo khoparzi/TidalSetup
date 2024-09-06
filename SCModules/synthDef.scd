@@ -168,9 +168,7 @@ SynthDef(\dummy, { |out, sustain = 1, speed = 1, begin = 0, end = 1, pan, accele
 	phase = Line.ar(begin, end, sustain);
 	rate = (begin + 1) * (speed + Sweep.kr(1, accelerate));
 	sound = DC.ar(0);
-	OffsetOut.ar(out,
-		DirtPan.ar(sound, ~dirt.numChannels, pan)
-	)
+	Out.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan))
 }).add
 );
 
@@ -182,9 +180,7 @@ SynthDef(\stiff, { |out, sustain = 1, freq, amp=0.5, c3=20, pan, fB = 80, rel= 0
 	var sound = DWGPluckedStiff.ar(freq, amp, 1,0.14,1,c3,inp,rel,fB);  //here was the problem!... input, release, feedback
 
 	DetectSilence.ar(sound, 0.001, doneAction:2);
-	OffsetOut.ar(out,
-		DirtPan.ar(sound * 0.1, ~dirt.numChannels, pan)
-	)
+	Out.ar(out, DirtPan.ar(sound * 0.1, ~dirt.numChannels, pan))
 }).add
 );
 
@@ -202,9 +198,7 @@ SynthDef(\atari, { | out, freq, freqb=550, freqc=660, vola=15, volb=0, volc=0, c
 		0, 3, vola, volb, volc, mul: amp);
 	// ay = ay * env;
 	// Out.ar(0, Pan2.ar(ay, pan));
-	OffsetOut.ar(out,
-		DirtPan.ar(ay, ~dirt.numChannels, pan, env)
-	)
+	Out.ar(out, DirtPan.ar(ay, ~dirt.numChannels, pan, env))
 }).add;
 );
 
@@ -218,9 +212,7 @@ SynthDef(\bow, { |out, freq, amp=0.5, force=1, /*gate, */ pos=0.07, c1=0.25, c3=
 	son = BPF.ar(son,490,1)+son;
 	son = LPF.ar(son,6000);
 	// Out.ar(out, Pan2.ar(son * 0.1, pan));
-	OffsetOut.ar(out,
-		DirtPan.ar(son * 0.1, ~dirt.numChannels, pan)
-	)
+	Out.ar(out, DirtPan.ar(son * 0.1, ~dirt.numChannels, pan))
 }).add;
 );
 
@@ -240,9 +232,7 @@ SynthDef(\bow, { |out, freq, amp=0.5, force=1, /*gate, */ pos=0.07, c1=0.25, c3=
 		freq: freq,
 		mul: env * SinOsc.kr(freq: LFTri.kr((sustain * 10).reciprocal, 3).exprange(loamp, maxamp)));
 	snd = Splay.ar(snd);
-	OffsetOut.ar(out,
-		DirtPan.ar(snd, ~dirt.numChannels, pan, env)
-	)
+	Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan, env))
 }).add;
 );
 
@@ -259,9 +249,7 @@ SynthDef(\bow, { |out, freq, amp=0.5, force=1, /*gate, */ pos=0.07, c1=0.25, c3=
 		freq: LFNoise2.kr(1).range(lofreq, hifreq)
 	);
 	snd = Splay.ar(snd);
-	OffsetOut.ar(out,
-		DirtPan.ar(snd, ~dirt.numChannels, pan, env)
-	)
+	Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan, env))
 }).add;
 );
 
@@ -281,9 +269,7 @@ SynthDef(\bow, { |out, freq, amp=0.5, force=1, /*gate, */ pos=0.07, c1=0.25, c3=
 	);
 	sum = snd;
 	sum = Splay.ar(sum);
-	OffsetOut.ar(out,
-		DirtPan.ar(sum, ~dirt.numChannels, pan, env)
-	)
+	Out.ar(out, DirtPan.ar(sum, ~dirt.numChannels, pan, env))
 }).add;
 );
 
@@ -293,7 +279,7 @@ SynthDef(\fander, { |out, amp=1, att=0, dec=0, sus=0.5,  rel=0, pan=0, accelerat
   var mod = SinOsc.ar(freq * modP * EnvGen.kr(Env.adsr(at, de,su,re,2,-4,0)), 0, freq * index * LFNoise1.kr(5.reciprocal).abs);
   var modu = SinOsc.ar(freq * moduP * EnvGen.kr(Env.adsr(at, de,su,re,2,-4,0)), 0, freq * index * LFNoise1.kr(5.reciprocal).abs);
   var car = SinOsc.ar(([freq, freq+detune] * carP) + [mod + modu], 0, mul);
-  OffsetOut.ar(out, DirtPan.ar(car * env * amp * 2, ~dirt.numChannels, pan));
+  Out.ar(out, DirtPan.ar(car * env * amp * 2, ~dirt.numChannels, pan));
 }).add;
 
 // A subbass Synth with a sine wave

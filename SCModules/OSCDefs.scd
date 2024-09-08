@@ -97,8 +97,7 @@
 					0.2.wait;
 					(~setupPath++"/SCModules/RAVE/RAVE-FX.scd").load();
 					(~setupPath++"/SCModules/RAVE/RAVE-Bus.scd").load();
-					// "\n\nSome ravin' synths".postln;
-					// (~setupPath++"/SCModules/RAVE/RAVE-Synth.scd").load();
+					(~setupPath++"/SCModules/RAVE/RAVE-Synth.scd").load();
 				}.fork;
 			}
 			{msg[1].asString == "ignoto"} {

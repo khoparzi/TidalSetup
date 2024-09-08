@@ -1,4 +1,5 @@
 (
+	var busses = ~dirt.orbits.collect { |x| x.dryBus };
     "\n\nSome ravin' synths".postln;
     OSCdef.new(\switchSynthModel, {
 		arg msg;
@@ -34,6 +35,17 @@
 		  sound = SinOsc.ar(freq*speed) * envGen;
 		  forward = NN(msg[1].asSymbol, \forward).ar(sound, 2048);
 		  Out.ar(out, DirtPan.ar(forward, ~dirt.numChannels, pan))
+		}).add;
+
+		SynthDef(\raveorb, { |out, amp = 1, n = 0, pan=0.5| // number
+			var bus, sound, ravePitchGrain = 0.2, ravePitchDisperse = 0.003, ravePitchRatio = 1, ravePitchTimeDisperse = 0.003;
+
+			bus = Select.kr(n, busses);
+			sound = InFeedback.ar(bus, 1);
+			sound = NN(msg[1].asSymbol, \forward).ar(sound, 2048);
+			// sound = PitchShift.ar(sound, ravePitchGrain, ravePitchRatio, ravePitchDisperse, ravePitchTimeDisperse);
+
+			Out.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan))
 		}).add;
 
 	}, '/switchSynthModel', nil, 57120);

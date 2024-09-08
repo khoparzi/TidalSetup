@@ -6,7 +6,8 @@ s.waitForBoot {
 	switch(s.options.outDevice)
 	{ "ES-9" } { ~dirt.start(57120, [0, 2, 4, 6, 8, 0, 2, 4, 6, 8]); }
 	{ "JackBridge" } { ~dirt.start(57120, [0, 2, 4, 6, 0, 2, 4, 6, 0, 2, 4, 6]); }
-	{ ~dirt.start(57120, 0 ! 12); };
+	//{ ~dirt.start(57120, 0 ! 12); };
+	{ ~dirt.start(57120, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3]); };
 
 	~dirt.soundLibrary.addSynth(\panic, (play: { ~dirt.orbits.do(_.freeSynths) }));
 })

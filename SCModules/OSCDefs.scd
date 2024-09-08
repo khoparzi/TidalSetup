@@ -92,8 +92,14 @@
 				~dirt.loadSoundFiles(~samplesPath++"/cringe/*");
 			}
 			{msg[1].asString == "rave"} {
-				"\n\nSome ravin' synths".postln;
-				(~setupPath++"/SCModules/RAVE.scd").load();
+				{
+					(~setupPath++"/SCModules/RAVE.scd").load();
+					0.2.wait;
+					(~setupPath++"/SCModules/RAVE/RAVE-FX.scd").load();
+					(~setupPath++"/SCModules/RAVE/RAVE-Bus.scd").load();
+					// "\n\nSome ravin' synths".postln;
+					// (~setupPath++"/SCModules/RAVE/RAVE-Synth.scd").load();
+				}.fork;
 			}
 			{msg[1].asString == "ignoto"} {
 				"\n\n\nSamples for ignoto".postln;
@@ -210,7 +216,7 @@
 			~dirt.orbits[0].outBus = 0;
 			~bus.free;
 			"\n\nNo Sidechain now".postln;
-			}, '/noside', nil, 57120);
+			}, '/nosidechain', nil, 57120);
 		OSCdef.new(\sidechained, {
 			arg msg;
 			// Sidechain d1 with d2

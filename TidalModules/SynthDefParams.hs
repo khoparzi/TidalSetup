@@ -14,3 +14,7 @@ let f = pF "f"
     tFreq = pF "tFreq"
     overlap = pF "overlap"
     numOsc = pF "numOsc"
+-- For rave synths
+    ravemix = pF "ravemix"
+    ravewet = pF "ravewet"
+    ravegain = pF "ravegain"

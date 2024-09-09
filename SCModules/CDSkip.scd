@@ -24,4 +24,28 @@
         x.initNodeTree;
     };
     "Added skip global effect".postln;
-)}.fork;)
+0.2.wait;
+    SynthDef(\skiporb, { 
+        |out, amp = 1, n = 0, pan=0.5, cdpos = 0, cdresetFreq = 1, cdskipFreq = 1, cdreset = 0, cdskip = 0|
+        var bus, sound;
+
+        bus = Select.kr(n, busses);
+        sound = InFeedback.ar(bus, ~dirt.numChannels);
+        sound = CDSkip.ar(
+                sound,
+                // pos: SinOsc.ar(cdpos),
+                // freeze: cdfreeze,
+                pos: cdpos,
+                skipTrigger: Impulse.ar(cdskipFreq, mul: cdskip)
+            );
+        sound = CDSkip.ar(
+                sound,
+                pos: cdpos,
+                resetTrigger: Impulse.ar(cdresetFreq, mul: cdreset),
+                autoSpeed: 1
+            );
+
+        Out.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan))
+    }).add;
+    "Added skip synth".postln;
+}.fork;)

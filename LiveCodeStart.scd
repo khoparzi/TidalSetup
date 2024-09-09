@@ -15,7 +15,6 @@
     // currentEnvironment.put(\visAddr, "khoparzi-jnano.local");
     (~setupPath++"/SCModules/OSCDefs.scd").load();
     // (~setupPath++"VSTLoader.scd").load(); // Temporary VST loader
-    (~setupPath++"/SCModules/CDSkip.scd").load();
 
 );
 

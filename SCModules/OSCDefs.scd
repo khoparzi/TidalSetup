@@ -243,11 +243,6 @@
 
 		OSCdef.new(\cdskip, {
 		"CDSkip enabled".postln;
-		// add cdskip effect to the orbits
-		~dirt.orbits.do { |x|
-			var cdskip = GlobalDirtEffect(\dirt_global_cdskip, [\cdpos, \cdresetfreq, \cdskipfreq, \cdreset, \cdskip, \cdfreeze]);
-			x.globalEffects = x.globalEffects.addFirst(cdskip);
-			x.initNodeTree;
-		};
+			(~setupPath++"/SCModules/CDSkip.scd").load();
 			}, '/cdskip', nil, 57120);
 	)

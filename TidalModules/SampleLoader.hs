@@ -24,3 +24,7 @@ let tosc m = sendOsc m ""
     vstLoad s = sendOsc "/vstLoad" s
     vstRead s = sendOsc "/vstRead" s
     vstSave s = sendOsc "/vstSave" s
+    vstEditor s = sendOsc "/vstEditor" s
+    vstLoad s = sendOsc "/vstLoad" s
+    vstRead s = sendOsc "/vstRead" s
+    vstSave s = sendOsc "/vstSave" s

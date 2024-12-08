@@ -143,7 +143,7 @@
 			}
 			{msg[1].asString == "dsynths"} {
 				"\n\nDiego's synths".postln;
-				~setupPath++"/ExternalModules/diegodorado-tidal-synths/loadAll.scd".load();
+				(~setupPath++"/ExternalModules/diegodorado-tidal-synths/loadAll.scd").load();
 			}
 			{msg[1].asString == "rsynths"} {
 				currentEnvironment.put(\renickPath, ~setupPath++"/ExternalModules/tidal-playground/synths/");
@@ -178,8 +178,15 @@
 			}, '/freeBank', nil, 57120);
 		OSCdef.new(\startrms, {
 			arg msg;
-			// For feedforward
-			~dirt.startSendRMS;
+            // Run this to start sending the RMS OSC messages to SC.
+            ~dirt.startSendRMS;
+            // The bridge will be listening to OSC messages on port UDP 9130.
+            b = NetAddr.new("127.0.0.1", 9130);
+            // This is the RMS OSC handler, here we'll forward these messages to our bridge
+            OSCFunc({ |msg|
+            // Forward OSC message
+                b.sendMsg("/rms", *msg);
+         	}, "/rms");
 			}, '/startrms', nil, 57120);
 		OSCdef.new(\openscope, {
 			arg msg;
@@ -199,32 +206,21 @@
 			arg msg;
 			~dirt.postSampleInfo;
 			}, '/sampleInfo', nil, 57120);
-		OSCdef.new(\showlevels, {
-			arg msg;
-			var w, spec;
-			spec = \db.asSpec;
-			w = Window("orbital volume", Rect(240, 240, 300, 500)).front;
-			w.view.layout = HLayout(*~dirt.orbits.collect { |x|
-				var val = spec.unmap(x.get(\amp).ampdb);
-				Slider().value_(val).action_({ |v| x.set(\amp, spec.map(v.value).dbamp.postln) })
-			});
-			"\n\nShow levels now".postln;
-			}, '/showlevels', nil, 57120);
 		OSCdef.new(\nosidechain, {
 			arg msg;
-			~dirt.orbits[0].outBus = 0;
+			~d1.outBus = 0;
 			~bus.free;
 			"\n\nNo Sidechain now".postln;
 			}, '/nosidechain', nil, 57120);
 		OSCdef.new(\sidechained, {
 			arg msg;
 			// Sidechain d1 with d2
-			~bus = Bus.audio(s, numChannels:2);
-			~dirt.orbits[0].outBus = ~bus;
+			~sidechainBus = Bus.audio(s, numChannels:2);
+			~d1.outBus = ~sidechainBus;
 			(
 				Ndef(\d1side, {
-					var control = InBus.ar(~dirt.orbits[1].dryBus, 2).sum;
-					var dirt = InBus.ar(~bus, 2);
+					var control = InBus.ar(~d2.dryBus, 2).sum;
+					var dirt = InBus.ar(~sidechainBus, 2);
 					Compander.ar(dirt, control, thresh: 0.001, slopeBelow: 1.0,
 						slopeAbove: 0.651, clampTime: 0.05, relaxTime: 0.1)
 					}).play;

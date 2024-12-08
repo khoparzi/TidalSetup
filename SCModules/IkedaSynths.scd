@@ -5,7 +5,7 @@ SynthDef(\click, { |out, sustain = 1, speed = 1, begin = 0, end = 1, pan, accele
 	rate = (begin + 1) * (speed + Sweep.kr(1, accelerate));
 	sound = Impulse.ar(0);
 	sound = Decay.ar(sound, sustain);
-	OffsetOut.ar(out,
+	Out.ar(out,
 		DirtPan.ar(sound, ~dirt.numChannels, pan)
 	)
 }).add;
@@ -19,7 +19,7 @@ SynthDef(\sinosc, {
   line = Line.ar(0,1,sustain,doneAction:2);
   envGen = IEnvGen.ar(env,line);
   sound = SinOsc.ar(freq*speed)*envGen;
-  OffsetOut.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan, envGen));
+  Out.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan, envGen));
 }).add;
 
 SynthDef(\ikclick, { arg out = 0, gate = 1, centerFreq = 15000, rq = 0.9, mul = 25, pan = 0, amp = 1;

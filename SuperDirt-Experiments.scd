@@ -9,11 +9,7 @@
 			timbre: timbre,
 			morph: morph
 		);
-	// Out.ar(out, Pan2.ar(sound, pan));
-	// OffsetOut.ar(out,
-	// 	Pan2.ar(sound, ~dirt.numChannels, pan)
-	// )
-	OffsetOut.ar(out,
+	Out.ar(out,
 		DirtPan.ar(sound, ~dirt.numChannels, pan)
 	)
 }).add);

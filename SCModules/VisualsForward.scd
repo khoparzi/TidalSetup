@@ -18,8 +18,6 @@
 	SynthDef(\dummy, { |out, sustain = 1, speed = 1, begin = 0, end = 1, pan, accelerate, offset, rate, phase|
 		var sound;
 		sound = DC.ar(0);
-		OffsetOut.ar(out,
-			DirtPan.ar(sound, ~dirt.numChannels, pan)
-		)
+		Out.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan))
 	}).add;
 )

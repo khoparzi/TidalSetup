@@ -26,7 +26,7 @@ SynthDef(\soskick, {
 
   kickMix = (drumEnv + beaterEnv) * 2;
 
-  OffsetOut.ar(out, DirtPan.ar(kickMix, ~dirt.numChannels, pan, env));
+  Out.ar(out, DirtPan.ar(kickMix, ~dirt.numChannels, pan, env));
 },
 metadata: (
   credit: "Renick Bell",
@@ -62,7 +62,7 @@ SynthDef(\soshats, {
 
   env = Line.kr(start: 1, end: 1, dur: sustain);
 
-  OffsetOut.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan, env));
+  Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan, env));
 },
 metadata: (
   credit: "Renick Bell",
@@ -94,7 +94,7 @@ SynthDef(\sostoms, {
   snd = (drumMode + stickEnv) / 4;
   snd = LeakDC.ar(snd);
 
-  OffsetOut.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan, drumModeEnv));
+  Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan, drumModeEnv));
 },
 metadata: (
   credit: "Renick Bell",
@@ -132,7 +132,7 @@ SynthDef(\sossnare, {
 
   snd = (drumMode + snares) * 8;
 
-  OffsetOut.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan, drumModeEnv));
+  Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan, drumModeEnv));
 },
 metadata: (
   credit: "Renick Bell",

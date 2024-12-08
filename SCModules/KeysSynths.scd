@@ -1,7 +1,7 @@
 (SynthDef(\piano, { |out, sustain = 1, freq=440, /*gate, */ amp=0.5, rho=1, pan, offset|
     var env = EnvGen.ar( Env.asr(0,1,0.1), /*gate, */ timeScale:sustain, doneAction:2 );
     var sound = OteyPianoStrings.ar( freq, amp, rho:rho ) * env;
-    OffsetOut.ar(out,
+    Out.ar(out,
     DirtPan.ar(sound * 1, ~dirt.numChannels, LinLin.kr(freq,36.midicps,90.midicps,-0.75,0.75), env )
     )
     }).add;
@@ -30,8 +30,6 @@ SynthDef(\rhodes, { | out freq pan vel = 0.8 modind = 0.2 mix = 0.2 lfospeed = 0
     // using the doneAction: 2 on the other envs can create clicks (bc of the linear curve maybe?)
     snd = snd * EnvGen.ar(Env.asr(0, 1, 0.1), gate, doneAction: 2);
     snd = Pan2.ar(snd, pan);
-    OffsetOut.ar(out,
-		DirtPan.ar(snd, ~dirt.numChannels, pan)
-	)
+    Out.ar(out, DirtPan.ar(snd, ~dirt.numChannels, pan))
     }).add;
     );

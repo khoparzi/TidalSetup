@@ -20,3 +20,5 @@ let tosc m = sendOsc m ""
     stoprecord = sendOsc "/stoprecord" ""
     iacLatency l = sendOsc "/iacLatency" l
     sidechain = sendOsc "/sidechained" ""
+    showsynths = sendOsc "/showsynths" ""
+    showsamples = sendOsc "/sampleInfo" ""

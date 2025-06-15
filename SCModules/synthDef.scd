@@ -459,5 +459,44 @@ SynthDef(\additivegliss, {
 	sig = sig * Env.asr(0.001, 1, 0.001).ar(Done.freeSelf, \gate.kr(1));
 
 	Out.ar(\out.kr(0), sig);
-}).add;
-);
+}).add;);
+
+(
+// From Nathan Ho's example
+// https://www.youtube.com/watch?v=C2C0nqtIHRg
+SynthDef(\additive, {
+  arg freqs = 60;
+  var snd, numPartials = 60, index;
+  index = (1..numPartials);
+  freqs = freqs * index * (1 + (index * index * 0.001)).sqrt;
+  snd = SinOsc.ar(freqs);
+  snd = snd * (log2(index) * \tilt.kr(-3)).dbamp;
+  // snd = snd * (1 - log2(n * MouseX.kr(1, 16)).sin.abs);
+  snd = snd.sum ! 2;
+  snd = snd * -20.dbamp;
+  // snd = SafetyLimiter.ar(snd);
+  Out.ar(\out.kr(0), snd);
+}).add;);
+
+/*(
+~dirt.addModule('additiveR', { |dirtEvent|
+    dirtEvent.sendSynth('additiveR' ++ ~dirt.numChannels,
+        [
+            numPartials: ~partials,
+            out: ~out
+        ]
+    )
+}, {~ringsbright.notNil});
+
+SynthDef("additiveR" ++ ~dirt.numChannels, {
+	|out, numPartials = 60|
+    var signal = In.ar(out, ~dirt.numChannels), snd, freqs, index;
+    index = (1..numPartials);
+    freqs = 60 * index * (1 + (index * index * 0.001)).sqrt;
+    snd = SinOsc.ar(freqs);
+    snd = snd * (log2(index) * \tilt.kr(-3)).dbamp;
+    snd = snd * (1 - log2(n * signal.linlin(0, 1, 1, 16)).sin.abs);
+    snd = snd.sum ! 2;
+    snd = snd * -20.dbamp;
+    ReplaceOut.ar(out, snd)
+}).add;)/*

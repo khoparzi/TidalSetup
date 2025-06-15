@@ -17,22 +17,13 @@
     // (~setupPath++"VSTLoader.scd").load(); // Temporary VST loader
 );
 
-// ~instruments.at(\fm8).editor
-// ~instruments.at(\massiveX).editor
-
-// Test a tidal synth
-// (type:\dirt, dirt: ~dirt, s: \soshats, n: -10, \release: 0.6).play;
-
-// (type:\dirt, dirt: ~dirt, s: \vst, n: 0, vstName: "fm8").play;
+// (
+// s.options.outDevice = "Loopback Audio";
+// s.options.outDevice = "Macbook Air Speakers";
+// s.reboot;
+// )
 
 // m = NetAddr("127.0.0.1", 57120); // loopback
 // m.sendMsg("/sampleInfo", "");
-
-// Show all synths
-// SynthDescLib.global.read;
-// 0.2.wait;
-// SynthDescLib.global.browse;
-// Show synth parameters
-// SuperDirt.postTidalParameters([\pmsin, \default]);
 
 // (type:\dirt, dirt: ~dirt, s: \bossdr660bd, n: 0).play;

@@ -1,9 +1,10 @@
-import qualified Sound.OSC as OSC
-import qualified Sound.OSC.FD as FD
+import qualified Sound.Osc as OSC
+import qualified Sound.Osc.Fd as FD
 import System.IO.Unsafe (unsafePerformIO)
 
 -- sendOsc :: OSC.Address_Pattern -> String -> IO ()
-let sendOsc path str = sendO False (sListen tidal) (head $ sCxs tidal) $ OSC.Message path [OSC.string str]
+let otherHead = (!! 0)
+    sendOsc path str = sendO False (sListen tidal) (otherHead $ sCxs tidal) $ OSC.Message path [OSC.string str]
 
 let tosc m = sendOsc m ""
     tosc' m a = sendOsc m a

@@ -27,8 +27,6 @@ import Control.Applicative
 
 :script /Users/khoparzi/Dev/TidalSetup/TidalModules/CommonPatterns.hs
 
-:script /Users/khoparzi/Dev/TidalSetup/TidalModules/MutingAliases.hs
-
 :script /Users/khoparzi/Dev/TidalSetup/TidalModules/MidiAliases.hs
 
 :script /Users/khoparzi/Dev/TidalSetup/TidalModules/SynthDefParams.hs

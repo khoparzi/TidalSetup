@@ -51,7 +51,7 @@ let erun = (run 8)
     bpmTri = bpmRange
 
 -- Pattern effects
-let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
+let bo p = trunc (segment 8 $ slow 2 $ saw + 0.125) $ p
     ob = trunc (slow 4 $ "<0.25 0.5 0.75 1>")
     ob' d = trunc (slow d $ "<0.25 0.5 0.75 1>")
     dubd p = sometimes (stut (choose[4, 8]) 0.0125 (1/8)) $ p
@@ -78,7 +78,6 @@ let bo p = trunc (segment 8 $ slowsaw + 0.125) $ p
     htrapper' s r = within (s, s + r) (hurry "<3 1.5>")
     microd p = often ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
     microd' p = rarely ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
-    microstb' a p = stb a ((# delay 0.3) . (# delaytime (choose[(1/16), (1/32)])) . (# delayfeedback 0.8)) $ p
     foldedParty p = foldEvery [3, 7, 13] (spread ($) [fast 4, jux (rev), spike]) $ p
     simplefuck p = foldEVery [5, 6, 7] (rip 0.5 "<0.1 0.2 0.4>") $ every 7 (# coarse "{4 8 6 12 16}%14") $ every 8 (# accelerate "-0.5 0.5") $ p
     mess = simplefuck

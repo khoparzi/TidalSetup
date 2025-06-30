@@ -1,9 +1,5 @@
 -- Aliases
 let inter = interlace
-    bpm(a) = setcps(a/120/2)
-    bpm2(a) = setcps(a/60/2)
-    bpm4(a) = setcps(a/60/4)
-    bpm8(a) = setcps(a/60/8)
     bpmm b = cps (b/120/2)
     st = stack
     ct = cat
@@ -28,11 +24,12 @@ let inter = interlace
     sin = sine
     cos = cosine
     sq  = square
-    pulse w = sig $ \t -> if ((snd $ properFraction t) >= w) then 1.0 else 0.0
+    -- Find replacement for properFraction
+    -- pulse w = sig $ \t -> if ((snd $ properFraction t) >= w) then 1.0 else 0.0
     pulse' w = liftA2 (\a b -> if (a>=b) then 1.0 else 0.0) saw w
-    pw = pulse
+    -- pw = pulse
     pw' = pulse'
-    stb a p = sometimesBy a p
+    stb a = sometimesBy a
     x e = (10 ** e) -- For exponent frequencies
     describe = deconstruct
 
@@ -49,7 +46,7 @@ let inter = interlace
     sawf  f = fast f $ saw -- saw at freq
     isawf f = fast f $ isaw -- inverted saw at freq
     sqf   f = fast f $ sq -- square at freq
-    pwf w f = fast f $ pw w -- pulse at freq
+    -- pwf w f = fast f $ pw w -- pulse at freq
     pwf' w f = fast f $ pw' w -- pulse' at freq
     randf f = fast f $ rand -- rand at freq
 
@@ -69,7 +66,7 @@ let inter = interlace
     rxsaw start out = rgx start out saw -- ranged' exponential saw
     rxisaw start out = rgx start out isaw -- ranged' exponential inverted saw
     rxsq  start out = rgx start out sq -- ranged' exponential sqaure
-    rxpw start out width = rgx start out pw width -- ranged' exponential pulse
+    -- rxpw start out width = rgx start out pw width -- ranged' exponential pulse
     rxpw' start out width = rgx start out pw' width -- ranged' exponential pulse'
     rxrand start out = rgx start out rand -- ranged' exponential rand
 
@@ -94,7 +91,7 @@ let inter = interlace
     rxsawf start out mult = fast mult $ rxsaw start out -- ranged' exponential saw at freq
     rxisawf start out mult = fast mult $ rxisaw start out -- ranged' exponential inverted saw at freq
     rxsqf start out mult = fast mult $ rxsq start out -- ranged' exponential square at freq
-    rxpwf start out width mult = fast mult $ rxpw start out width -- ranged' exponential pulse at freq
+    -- rxpwf start out width mult = fast mult $ rxpw start out width -- ranged' exponential pulse at freq
     rxpwf' start out width mult = fast mult $ rxpw' start out width -- ranged' exponential pulse' at freq
     rxrandf start out mult = fast mult $ rxrand start out  -- ranged' exponential random at freq
 

@@ -141,7 +141,12 @@
 				(~setupPath++"/SCModules/RenickSynths.scd").load();
 			}
 			{msg[1].asString == "lsynths"} {
-				(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-superfm.scd").load();
+			    "Loading Loopier's synths".postln;
+				(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-tidal.scd").load();
+				(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-chant.scd").load();
+				(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-oscillators.scd").load();
+				(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-industrial.scd").load();
+				//(~setupPath++"/ExternalModules/loopier-synthdefs/synthdef-wobble.scd").load();
 			}
 			{msg[1].asString == "drum-machines"} {
 	    // add this to your superdirt startup

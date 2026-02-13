@@ -134,7 +134,7 @@
 			}
 			{msg[1].asString == "dsynths"} {
 				"\n\nDiego's synths".postln;
-				(~setupPath++"/ExternalModules/diegodorado-tidal-synths/loadAll.scd").load();
+				(~setupPath++"ExternalModules/diegodorado-tidal-synths/loadAll.scd").load();
 			}
 			{msg[1].asString == "rsynths"} {
 				currentEnvironment.put(\renickPath, ~setupPath++"/ExternalModules/tidal-playground/synths/");
@@ -218,9 +218,9 @@
 					var control = InBus.ar(~d2.dryBus, 2).sum;
 					var dirt = InBus.ar(~sidechainBus, 2);
 					Compander.ar(dirt, control, thresh: 0.001, slopeBelow: 1.0,
-						slopeAbove: 0.651, clampTime: 0.05, relaxTime: 0.1)
+						slopeAbove: 0.651, clampTime: 0.05, relaxTime: 0.2)
 					}).play;
-				"\n\nd1 is now sidechained by d2".postln;
+				"\n\norbit 1 is now sidechained by orbit 2".postln;
 				)
 			}, '/sidechained', nil, 57120);
 		OSCdef.new(\setsidechain, {
